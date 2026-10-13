@@ -1,0 +1,9 @@
+{
+  "name": "design-taste-frontend",
+  "source": "https://github.com/Leonxlnx/taste-skill",
+  "commit": "c924fad1a79c7d70a04bcc8c415b593e9928ad8a",
+  "source_path": "skills/taste-skill",
+  "license": "MIT",
+  "status": "installed as project-local Codex skill; SKILL.md read; automatic discovery in a new session not tested",
+  "scripts_executed": false
+}

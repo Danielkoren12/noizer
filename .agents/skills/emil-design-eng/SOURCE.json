@@ -1,0 +1,9 @@
+{
+  "name": "emil-design-eng",
+  "source": "https://github.com/emilkowalski/skills",
+  "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+  "source_path": "skills/emil-design-eng",
+  "license": "MIT",
+  "status": "installed as project-local Codex skill; SKILL.md read; automatic discovery in a new session not tested",
+  "scripts_executed": false
+}

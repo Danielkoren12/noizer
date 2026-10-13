@@ -1,0 +1,9 @@
+{
+  "name": "impeccable",
+  "source": "https://github.com/pbakaus/impeccable",
+  "commit": "2f98774f86bc05563876643db37e6c37c322850f",
+  "source_path": ".claude/skills/impeccable",
+  "license": "Apache-2.0",
+  "status": "installed as project-local Codex skill; SKILL.md read; automatic discovery in a new session not tested",
+  "scripts_executed": false
+}
