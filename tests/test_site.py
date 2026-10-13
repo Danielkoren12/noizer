@@ -78,14 +78,30 @@ class SiteTests(unittest.TestCase):
     def test_spray_character_tracks_text_and_stops_on_skip_and_reduced_motion(self):
         page = self.page()
         page.goto(URL)
-        self.assertEqual(page.locator('.spray-first').evaluate('(el) => getComputedStyle(el).animationDuration'), '0.85s')
-        self.assertEqual(page.locator('.spray-second').evaluate('(el) => getComputedStyle(el).animationDelay'), '0.95s')
-        self.assertEqual(page.locator('.spray-third').evaluate('(el) => getComputedStyle(el).animationDelay'), '1.9s')
         page.wait_for_timeout(100)
-        first_position = page.locator('#spray-character').get_attribute('style')
-        page.wait_for_timeout(200)
-        self.assertNotEqual(page.locator('#spray-character').get_attribute('style'), first_position)
-        self.assertTrue(page.locator('#paint-trail').get_attribute('d').startswith('M'))
+        def sample(time):
+            return page.evaluate("""(time) => {
+                cancelAnimationFrame(characterFrame);
+                moveSprayCharacter(startedAt + time);
+                cancelAnimationFrame(characterFrame);
+                return {
+                    lines: [...document.querySelectorAll('.spray-line')].map(el => el.style.clipPath),
+                    position: document.querySelector('#spray-character').style.transform,
+                    spray: document.querySelector('#paint-trail').style.opacity
+                };
+            }""", time)
+        writing = sample(850)
+        self.assertIn('50%', writing['lines'][0])
+        self.assertIn('100%', writing['lines'][1])
+        end_of_line = sample(1700)
+        returning = sample(1900)
+        self.assertEqual(end_of_line['lines'], returning['lines'])
+        self.assertNotEqual(end_of_line['position'], returning['position'])
+        self.assertEqual(returning['spray'], '0')
+        next_line = sample(3000)
+        self.assertIn('50%', next_line['lines'][1])
+        self.assertIn('100%', next_line['lines'][2])
+        self.assertNotEqual(next_line['spray'], '0')
         page.locator('#skip-animation').click()
         self.assertEqual(page.locator('#spray-character').get_attribute('style'), '')
         self.assertEqual(page.locator('#paint-trail').evaluate('(el) => getComputedStyle(el).opacity'), '0')

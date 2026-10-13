@@ -7,23 +7,28 @@ const skipAnimation = document.querySelector('#skip-animation');
 const replayAnimation = document.querySelector('#replay-animation');
 const sprayCharacter = document.querySelector('#spray-character');
 const paintTrail = document.querySelector('#paint-trail');
-let animationTimer;
+const sprayLines = [...document.querySelectorAll('.spray-line')];
+const WRITE_MS = 1700;
+const RETURN_MS = 450;
+const TOTAL_MS = WRITE_MS * 3 + RETURN_MS * 2 + 250;
 let characterFrame;
 let characterGeometry;
+let introRun = 0;
+let startedAt;
 
-// Follow the existing CSS text reveal; its wording, timing and easing are unchanged.
 function measureCharacterPath() {
   const wall = document.querySelector('.spray-wall');
   const style = getComputedStyle(wall);
   const matrix = new DOMMatrix(style.transform);
   const [originX, originY] = style.transformOrigin.split(' ').map(parseFloat);
-  const width = sprayCharacter.clientWidth;
-  const height = sprayCharacter.clientHeight;
   characterGeometry = {
-    width, height,
-    maxX: sprayArt.clientWidth - width,
-    maxY: sprayArt.clientHeight - height,
-    lines: [...wall.querySelectorAll('.spray-line')].map((line) => {
+    width: sprayCharacter.clientWidth,
+    height: sprayCharacter.clientHeight,
+    maxX: sprayArt.clientWidth - sprayCharacter.clientWidth,
+    maxY: sprayArt.clientHeight - sprayCharacter.clientHeight,
+    restX: sprayArt.clientWidth - sprayCharacter.clientWidth - parseFloat(getComputedStyle(sprayCharacter).getPropertyValue("--kid-rest-right")),
+    restY: sprayArt.clientHeight - sprayCharacter.clientHeight - parseFloat(getComputedStyle(sprayCharacter).getPropertyValue("--kid-rest-bottom")),
+    lines: sprayLines.map((line) => {
       const point = (x) => {
         const result = new DOMPoint(line.offsetLeft + x - originX,
           line.offsetTop + line.clientHeight * 0.74 - originY).matrixTransform(matrix);
@@ -34,42 +39,72 @@ function measureCharacterPath() {
   };
 }
 
-function moveSprayCharacter() {
+const mixPoint = (from, to, amount) => ({
+  x: from.x + (to.x - from.x) * amount,
+  y: from.y + (to.y - from.y) * amount
+});
+
+// One clock draws the letters, moves the boy and places the spray endpoint.
+// The return journey is real movement; the next line stays unpainted until arrival.
+function moveSprayCharacter(now) {
   if (!sprayArt.classList.contains('spraying')) return;
-  // CSS animations are the clock, so the illustrator follows the real paint edge.
-  const animation = document.querySelector('.spray-first').getAnimations()[0];
-  const elapsed = animation?.currentTime ?? 0;
-  const row = Math.min(2, Math.floor(elapsed / 950));
-  const rowTime = elapsed - row * 950;
-  const progress = Math.min(1, Math.max(0, rowTime / 850));
-  const { start, end } = characterGeometry.lines[row];
-  const targetX = start.x + (end.x - start.x) * progress;
-  const targetY = start.y + (end.y - start.y) * progress;
-  const x = Math.min(characterGeometry.maxX, Math.max(0, targetX - 18));
-  const y = Math.min(characterGeometry.maxY, Math.max(0, targetY + 12));
+  startedAt ??= now;
+  const elapsed = now - startedAt;
+  const row = Math.min(2, Math.floor(elapsed / (WRITE_MS + RETURN_MS)));
+  const localTime = elapsed - row * (WRITE_MS + RETURN_MS);
+  const progress = Math.min(1, localTime / WRITE_MS);
+  const returning = localTime >= WRITE_MS;
+  sprayLines.forEach((line, index) => {
+    const amount = index < row ? 1 : index === row ? progress : 0;
+    line.style.clipPath = `inset(-5% ${(1 - amount) * 100}% -5% -5%)`;
+  });
+  const line = characterGeometry.lines[row];
+  let target = mixPoint(line.start, line.end, progress);
+  if (returning) {
+    const fraction = Math.min(1, (localTime - WRITE_MS) / (row < 2 ? RETURN_MS : 250));
+    const smooth = fraction * fraction * (3 - 2 * fraction);
+    const destination = row < 2 ? characterGeometry.lines[row + 1].start : {
+      x: characterGeometry.restX + characterGeometry.width * 0.75,
+      y: characterGeometry.restY + characterGeometry.height * (25 / 280) - 18
+    };
+    target = mixPoint(line.end, destination, smooth);
+  }
+  const nozzleOffsetX = characterGeometry.width * 0.75;
+  const nozzleOffsetY = characterGeometry.height * (25 / 280);
+  const x = Math.min(characterGeometry.maxX, Math.max(0, target.x - nozzleOffsetX));
+  const y = Math.min(characterGeometry.maxY, Math.max(0, target.y + 18 - nozzleOffsetY));
   sprayCharacter.style.transform = `translate(${x}px, ${y}px)`;
-  const nozzleX = x + characterGeometry.width * 0.12;
-  const nozzleY = y + characterGeometry.height * 0.11;
-  paintTrail.setAttribute('d', `M${nozzleX} ${nozzleY} Q${targetX - 12} ${targetY + 10} ${targetX} ${targetY}`);
-  paintTrail.style.opacity = rowTime < 850 ? '0.65' : '0';
+  sprayCharacter.classList.toggle('is-walking', localTime < WRITE_MS || returning);
+  paintTrail.setAttribute('d', `M${x + nozzleOffsetX} ${y + nozzleOffsetY} L${target.x} ${target.y}`);
+  paintTrail.style.opacity = !returning && localTime < WRITE_MS ? '0.7' : '0';
+  if (elapsed >= TOTAL_MS) {
+    finishSpray();
+    return;
+  }
   characterFrame = requestAnimationFrame(moveSprayCharacter);
 }
 
-function startSpray() {
+async function startSpray() {
   if (motionPreference.matches) return;
-  sprayArt.classList.add('spraying');
+  const run = ++introRun;
   skipAnimation.hidden = false;
   replayAnimation.hidden = true;
+  // Measure the actual loaded letterforms so no font swap shifts the paint path.
+  await document.fonts.ready;
+  if (run !== introRun || motionPreference.matches) return;
+  sprayArt.classList.add('spraying');
+  startedAt = undefined;
   measureCharacterPath();
   characterFrame = requestAnimationFrame(moveSprayCharacter);
-  animationTimer = window.setTimeout(finishSpray, 3100);
 }
 
 function finishSpray() {
-  window.clearTimeout(animationTimer);
+  introRun++;
   cancelAnimationFrame(characterFrame);
   sprayArt.classList.remove('spraying');
+  sprayCharacter.classList.remove('is-walking');
   sprayCharacter.style.transform = '';
+  sprayLines.forEach((line) => { line.style.clipPath = ''; });
   paintTrail.style.opacity = '0';
   skipAnimation.hidden = true;
   replayAnimation.hidden = motionPreference.matches;
