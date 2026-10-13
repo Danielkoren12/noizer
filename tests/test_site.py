@@ -75,6 +75,27 @@ class SiteTests(unittest.TestCase):
         another.emulate_media(reduced_motion='reduce')
         another.wait_for_function("!document.querySelector('#spray-art').classList.contains('spraying')")
 
+    def test_spray_character_tracks_text_and_stops_on_skip_and_reduced_motion(self):
+        page = self.page()
+        page.goto(URL)
+        self.assertEqual(page.locator('.spray-first').evaluate('(el) => getComputedStyle(el).animationDuration'), '0.85s')
+        self.assertEqual(page.locator('.spray-second').evaluate('(el) => getComputedStyle(el).animationDelay'), '0.95s')
+        self.assertEqual(page.locator('.spray-third').evaluate('(el) => getComputedStyle(el).animationDelay'), '1.9s')
+        page.wait_for_timeout(100)
+        first_position = page.locator('#spray-character').get_attribute('style')
+        page.wait_for_timeout(200)
+        self.assertNotEqual(page.locator('#spray-character').get_attribute('style'), first_position)
+        self.assertTrue(page.locator('#paint-trail').get_attribute('d').startswith('M'))
+        page.locator('#skip-animation').click()
+        self.assertEqual(page.locator('#spray-character').get_attribute('style'), '')
+        self.assertEqual(page.locator('#paint-trail').evaluate('(el) => getComputedStyle(el).opacity'), '0')
+        page.locator('#replay-animation').click()
+        self.assertTrue(page.locator('#skip-animation').is_visible())
+        page.emulate_media(reduced_motion='reduce')
+        page.wait_for_function("!document.querySelector('#spray-art').classList.contains('spraying')")
+        self.assertFalse(page.locator('#replay-animation').is_visible())
+        self.assertEqual(page.locator('#spray-character').get_attribute('style'), '')
+
     def test_banner_comparison_and_status(self):
         page = self.page(reduced_motion='reduce')
         page.goto(URL)
@@ -134,7 +155,8 @@ class SiteTests(unittest.TestCase):
                 self.assertTrue(all(url.startswith(URL) for url in requests))
                 self.assertTrue(page.evaluate('document.fonts.check("700 32px Karantina")'))
                 self.assertEqual(page.locator('img').count(), 0)
-                self.assertIn('מקום לדמות', page.locator('.character-placeholder').inner_text())
+                self.assertEqual(page.locator('.character-placeholder').count(), 0)
+                self.assertTrue(page.locator('#spray-character').is_visible())
                 self.assertEqual(page.locator('.empty-video').count(), 2)
                 page.close()
 

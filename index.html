@@ -55,9 +55,47 @@
           <path d="M43 340c46-12 87-16 129-10M51 352c48-12 72-13 120-10" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
           <path d="M420 365c-22 22-48 16-60 43m0 0 0-19m0 19 20-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
         </svg>
-        <div class="character-placeholder" dir="rtl"><span>מקום לדמות <br> הספריי שלכם</span></div>
+        <svg class="paint-stream" aria-hidden="true"><path id="paint-trail" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 7"/></svg>
+        <svg class="spray-character" id="spray-character" viewBox="0 0 180 280" aria-hidden="true" focusable="false">
+          <g stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Oversized jeans and high-top sneakers. -->
+            <path d="m77 178-11 59 24 8 17-46 8 45 25-7-3-65" fill="#000"/>
+            <path d="m103 189-3 23m-23 17 12 5m32-2 12-3" fill="none" stroke="#fff" stroke-width="2"/>
+            <path d="m66 233-11 17-21 10c-5 4-3 10 3 11h56l-3-31Z" fill="#fff"/>
+            <path d="m116 237 6 16 22 7c8 3 10 9 4 12h-40l-8-29Z" fill="#fff"/>
+            <path d="M34 266h57m16 1h43M58 251l20 3m-25 5 23 2m40-6 15 5" fill="none" stroke-width="2"/>
+            <path d="m73 234 3 12m44-8-3 10" fill="none"/>
+            <!-- Hoodie: black fabric with white seam lines. -->
+            <path d="M82 109c-17 6-26 21-21 38l11 14-7 26c21 11 51 12 75-1l-1-46c-2-20-13-31-30-35Z" fill="#000"/>
+            <path d="m79 112 18 17 18-19M95 126l-2 28m14-31 4 28M78 174l35 5 13-12" fill="none" stroke="#fff" stroke-width="2"/>
+            <path d="m130 138 11 21-5 15-13-5 6-15-8-14" fill="#fff"/>
+            <path d="m124 163 13 6" fill="none"/>
+            <!-- Spiky hair and a cheeky face, original to this mascot. -->
+            <path d="m91 100-2 16c10 9 18 9 24-3l-1-15" fill="#fff"/>
+            <path d="M68 52c-5 21 1 45 18 53 20 10 42-1 45-21l1-35-39-17Z" fill="#fff"/>
+            <path d="m66 61-11-15 15 1-6-19 20 9 2-24 17 17 11-23 8 23 24-8-11 24 18 4-19 17-4-14-18 1-11-10-10 13-9-6-5 16Z" fill="#000"/>
+            <path d="M71 65c-12-6-15 10-6 14l9 1" fill="#fff"/>
+            <path d="m82 64 13 4m14-5 12-2" fill="none"/>
+            <path d="m81 69 11 5c-4 7-9 6-11-5m28-2 11-3c0 8-5 10-11 3" fill="#000" stroke-width="2"/>
+            <path d="m98 73-5 10 7 1" fill="none" stroke-width="2"/>
+            <path d="m81 88 36-3c-5 13-26 18-36 3Z" fill="#fff" stroke-width="2.5"/>
+            <path d="m89 88 2 9m7-10 1 10m8-11 1 7m-25-2 30-2" fill="none" stroke-width="1.5"/>
+            <!-- Raised arm and spray can, pointing toward the lettering. -->
+            <g class="kid-painting-arm">
+              <path d="m78 126-21-18-21-57-14 7 16 62 27 25" fill="#fff"/>
+              <path d="m69 118 18 10-13 23-19-15Z" fill="#000"/>
+              <path d="m57 133 17 10" fill="none" stroke="#fff" stroke-width="2"/>
+              <path d="m13 34 24-5 9 39-24 5Z" fill="#000"/>
+              <path d="m17 35-2-7 15-3 3 7" fill="#fff"/>
+              <path d="m17 48 23-5m-19 20 22-5" fill="none" stroke="#fff" stroke-width="2"/>
+              <path d="m29 53 5-4c6 0 10 3 10 9l-3 7-9-4" fill="#fff" stroke-width="2.5"/>
+              <path d="m17 27-3-5 8-2 3 5" fill="#000"/>
+            </g>
+          </g>
+        </svg>
         <span class="art-note" lang="en">a little noise. <br> a lot of presence.</span>
         <button class="skip-animation" id="skip-animation" type="button" hidden>דלגו על האנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></button>
+        <button class="replay-animation" id="replay-animation" type="button" hidden>צפו שוב באנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
       </div>
       <div class="hero-foot"><span><i aria-hidden="true"></i> תוכן אמיתי. נוכחות חדשה.</span><span dir="ltr" lang="en">REELS / SHORTS / REAL PEOPLE</span><a href="#examples" aria-label="המשיכו לדוגמאות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a></div>
     </section>
