@@ -15,6 +15,79 @@ let characterFrame;
 let characterGeometry;
 let introRun = 0;
 let startedAt;
+const soundToggle = document.querySelector('#sound-toggle');
+const soundLabel = document.querySelector('#sound-label');
+let sprayAudio;
+let soundEnabled = false;
+let hissPlaying = false;
+
+// A quiet aerosol hiss, synthesized locally. No sound files or network requests.
+function createSprayAudio() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  const context = new AudioContextClass();
+  const noise = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
+  const samples = noise.getChannelData(0);
+  for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
+  const source = context.createBufferSource();
+  source.buffer = noise;
+  source.loop = true;
+  const highpass = context.createBiquadFilter();
+  highpass.type = 'highpass';
+  highpass.frequency.value = 1400;
+  const lowpass = context.createBiquadFilter();
+  lowpass.type = 'lowpass';
+  lowpass.frequency.value = 8500;
+  const gain = context.createGain();
+  gain.gain.value = 0;
+  source.connect(highpass).connect(lowpass).connect(gain).connect(context.destination);
+  source.start();
+  return { context, source, gain };
+}
+
+function setSprayHiss(writing) {
+  const audible = Boolean(writing && soundEnabled && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
+  if (!sprayAudio || audible === hissPlaying) return;
+  hissPlaying = audible;
+  const now = sprayAudio.context.currentTime;
+  const gain = sprayAudio.gain.gain;
+  gain.cancelScheduledValues(now);
+  gain.setValueAtTime(gain.value, now);
+  gain.linearRampToValueAtTime(audible ? 0.12 : 0, now + 0.025);
+}
+
+if (window.AudioContext || window.webkitAudioContext) {
+  soundToggle.hidden = motionPreference.matches;
+  soundToggle.addEventListener('click', async () => {
+    soundToggle.disabled = true;
+    try {
+      if (!soundEnabled) {
+        sprayAudio ??= createSprayAudio();
+        let timeout;
+        try {
+          await Promise.race([
+            sprayAudio.context.resume(),
+            new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('Audio unavailable')), 1800); })
+          ]);
+        } finally { clearTimeout(timeout); }
+      }
+      soundEnabled = !soundEnabled;
+      soundToggle.setAttribute('aria-pressed', String(soundEnabled));
+      soundLabel.textContent = soundEnabled ? 'צליל ספריי: פועל' : 'צליל ספריי: כבוי';
+      if (!soundEnabled) setSprayHiss(false);
+      else if (!sprayArt.classList.contains('spraying')) startSpray();
+    } catch {
+      soundEnabled = false;
+      soundToggle.setAttribute('aria-pressed', 'false');
+      soundLabel.textContent = 'הצליל לא זמין — נסו שוב';
+      setSprayHiss(false);
+    } finally { soundToggle.disabled = false; }
+  });
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) setSprayHiss(false);
+});
+window.addEventListener('blur', () => setSprayHiss(false));
+window.addEventListener('pagehide', () => setSprayHiss(false));
 
 function measureCharacterPath() {
   const wall = document.querySelector('.spray-wall');
@@ -77,6 +150,7 @@ function moveSprayCharacter(now) {
   sprayCharacter.classList.toggle('is-walking', localTime < WRITE_MS || returning);
   paintTrail.setAttribute('d', `M${x + nozzleOffsetX} ${y + nozzleOffsetY} L${target.x} ${target.y}`);
   paintTrail.style.opacity = !returning && localTime < WRITE_MS ? '0.7' : '0';
+  setSprayHiss(!returning && localTime < WRITE_MS);
   if (elapsed >= TOTAL_MS) {
     finishSpray();
     return;
@@ -99,6 +173,7 @@ async function startSpray() {
 }
 
 function finishSpray() {
+  setSprayHiss(false);
   introRun++;
   cancelAnimationFrame(characterFrame);
   sprayArt.classList.remove('spraying');
@@ -140,6 +215,7 @@ skipAnimation.addEventListener('click', () => {
 motionPreference.addEventListener('change', (event) => {
   if (event.matches) finishSpray();
   replayAnimation.hidden = event.matches;
+  soundToggle.hidden = event.matches || !(window.AudioContext || window.webkitAudioContext);
 });
 
 // A working before/after demonstration without pretending the stills are videos.

@@ -127,6 +127,44 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(button.get_attribute('aria-pressed'), 'true')
         self.assertEqual(page.locator('.mock-banner').first.get_attribute('aria-hidden'), 'false')
 
+    def test_spray_audio_is_opt_in_and_silent_during_return_and_skip(self):
+        page = self.page()
+        page.goto(URL)
+        button = page.locator('#sound-toggle')
+        self.assertEqual(button.get_attribute('aria-pressed'), 'false')
+        self.assertTrue(page.evaluate('sprayAudio === undefined'))
+        button.click()
+        page.wait_for_function('soundEnabled && sprayAudio.context.state === "running"')
+        page.evaluate('''() => {
+            cancelAnimationFrame(characterFrame);
+            moveSprayCharacter(startedAt + 850);
+            cancelAnimationFrame(characterFrame);
+            window.audioMeter = sprayAudio.context.createAnalyser();
+            window.audioMeter.fftSize = 2048;
+            sprayAudio.gain.connect(window.audioMeter);
+            window.audioMeter.connect(sprayAudio.context.destination);
+        }''')
+        page.wait_for_timeout(130)
+        def rms():
+            return page.evaluate('''() => {
+                const data = new Float32Array(window.audioMeter.fftSize);
+                window.audioMeter.getFloatTimeDomainData(data);
+                return Math.sqrt(data.reduce((sum, value) => sum + value * value, 0) / data.length);
+            }''')
+        self.assertGreater(rms(), 0.001)
+        page.evaluate('''() => {
+            moveSprayCharacter(startedAt + 1900);
+            cancelAnimationFrame(characterFrame);
+        }''')
+        page.wait_for_timeout(130)
+        self.assertLess(rms(), 0.00001)
+        page.locator('#skip-animation').click()
+        self.assertFalse(page.evaluate('hissPlaying'))
+        page.locator('#replay-animation').click()
+        button.click()
+        self.assertEqual(button.get_attribute('aria-pressed'), 'false')
+        self.assertFalse(page.evaluate('hissPlaying'))
+
     def test_contact_routes_are_real_and_distinct(self):
         page = self.page()
         page.goto(URL)
