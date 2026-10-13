@@ -28,10 +28,9 @@
 .blue-to-white{--edge-from:var(--blue);--edge-to:var(--paper)}
 .white-to-ink{--edge-from:var(--paper);--edge-to:var(--ink)}
 .ink-to-white{--edge-from:var(--ink);--edge-to:var(--paper)}
-.contact-channel{font-size:12px;color:#dce0e8}
 .direct-contact{display:flex;align-items:center;flex-wrap:wrap;gap:12px 32px;margin-top:40px}
 .direct-contact .email-line{margin-top:0}
 .phone-link{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-size:15px;text-decoration:underline;text-decoration-color:#ffffff60;text-underline-offset:5px}
-.phone-link svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.5;fill:none}
+.phone-link .whatsapp-icon{width:28px;height:28px;flex-shrink:0}
 @media(hover:hover) and (pointer:fine){.phone-link:hover{text-decoration-color:white}}
 @media(max-width:760px){.direct-contact{margin-top:28px;gap:8px 24px}.section-transition{height:14px}}
