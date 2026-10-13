@@ -56,9 +56,4 @@
 
 .animation-controls{position:absolute;bottom:-18px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .animation-controls .skip-animation,.animation-controls .replay-animation{position:static}
-.sound-toggle{display:inline-flex;align-items:center;gap:8px;direction:rtl;min-height:44px;padding:7px 0;border:0;border-bottom:1px solid currentColor;background:transparent;color:var(--subtle);font-size:12px}
-.sound-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.sound-toggle[aria-pressed=false] .sound-waves,.sound-toggle[aria-pressed=true] .sound-muted{display:none}
-.sound-toggle[aria-pressed=true]{color:var(--blue)}
-.sound-toggle:disabled{opacity:.65}
-@media(max-width:760px){.animation-controls{bottom:0;gap:8px}.sound-toggle{font-size:11px;gap:6px}}
+@media(max-width:760px){.animation-controls{bottom:0;gap:8px}}

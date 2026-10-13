@@ -127,14 +127,14 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(button.get_attribute('aria-pressed'), 'true')
         self.assertEqual(page.locator('.mock-banner').first.get_attribute('aria-hidden'), 'false')
 
-    def test_spray_audio_is_opt_in_and_silent_during_return_and_skip(self):
-        page = self.page()
+    def test_spray_audio_starts_automatically_when_allowed_and_stops_on_return_and_skip(self):
+        browser = self.playwright.chromium.launch(executable_path='/usr/bin/chromium',
+            args=['--no-sandbox', '--autoplay-policy=no-user-gesture-required'])
+        self.addCleanup(browser.close)
+        page = browser.new_page()
         page.goto(URL)
-        button = page.locator('#sound-toggle')
-        self.assertEqual(button.get_attribute('aria-pressed'), 'false')
-        self.assertTrue(page.evaluate('sprayAudio === undefined'))
-        button.click()
-        page.wait_for_function('soundEnabled && sprayAudio.context.state === "running"')
+        self.assertEqual(page.locator('#sound-toggle').count(), 0)
+        page.wait_for_function('sprayAudio && sprayAudio.context.state === "running"')
         page.evaluate('''() => {
             cancelAnimationFrame(characterFrame);
             moveSprayCharacter(startedAt + 850);
@@ -161,8 +161,8 @@ class SiteTests(unittest.TestCase):
         page.locator('#skip-animation').click()
         self.assertFalse(page.evaluate('hissPlaying'))
         page.locator('#replay-animation').click()
-        button.click()
-        self.assertEqual(button.get_attribute('aria-pressed'), 'false')
+        page.wait_for_function('hissPlaying')
+        page.locator('#skip-animation').click()
         self.assertFalse(page.evaluate('hissPlaying'))
 
     def test_contact_routes_are_real_and_distinct(self):

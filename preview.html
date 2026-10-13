@@ -73,12 +73,7 @@
 
 .animation-controls{position:absolute;bottom:-18px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .animation-controls .skip-animation,.animation-controls .replay-animation{position:static}
-.sound-toggle{display:inline-flex;align-items:center;gap:8px;direction:rtl;min-height:44px;padding:7px 0;border:0;border-bottom:1px solid currentColor;background:transparent;color:var(--subtle);font-size:12px}
-.sound-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.sound-toggle[aria-pressed=false] .sound-waves,.sound-toggle[aria-pressed=true] .sound-muted{display:none}
-.sound-toggle[aria-pressed=true]{color:var(--blue)}
-.sound-toggle:disabled{opacity:.65}
-@media(max-width:760px){.animation-controls{bottom:0;gap:8px}.sound-toggle{font-size:11px;gap:6px}}
+@media(max-width:760px){.animation-controls{bottom:0;gap:8px}}
 
 </style>
   
@@ -155,7 +150,6 @@
         <div class="animation-controls">
           <button class="skip-animation" id="skip-animation" type="button" hidden>דלגו על האנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></button>
           <button class="replay-animation" id="replay-animation" type="button" hidden>צפו שוב באנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
-          <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4 5 9H2v6h3l6 5V4Z"/><path class="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-muted" d="m16 9 6 6m0-6-6 6"/></svg><span id="sound-label">צליל ספריי: כבוי</span></button>
         </div>
       </div>
       <div class="hero-foot"><span><i aria-hidden="true"></i> תוכן אמיתי. נוכחות חדשה.</span><span dir="ltr" lang="en">REELS / SHORTS / REAL PEOPLE</span><a href="#examples" aria-label="המשיכו לדוגמאות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a></div>
@@ -245,10 +239,7 @@ let characterFrame;
 let characterGeometry;
 let introRun = 0;
 let startedAt;
-const soundToggle = document.querySelector('#sound-toggle');
-const soundLabel = document.querySelector('#sound-label');
 let sprayAudio;
-let soundEnabled = false;
 let hissPlaying = false;
 
 // A quiet aerosol hiss, synthesized locally. No sound files or network requests.
@@ -275,7 +266,7 @@ function createSprayAudio() {
 }
 
 function setSprayHiss(writing) {
-  const audible = Boolean(writing && soundEnabled && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
+  const audible = Boolean(writing && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
   if (!sprayAudio || audible === hissPlaying) return;
   hissPlaying = audible;
   const now = sprayAudio.context.currentTime;
@@ -285,33 +276,14 @@ function setSprayHiss(writing) {
   gain.linearRampToValueAtTime(audible ? 0.12 : 0, now + 0.025);
 }
 
-if (window.AudioContext || window.webkitAudioContext) {
-  soundToggle.hidden = motionPreference.matches;
-  soundToggle.addEventListener('click', async () => {
-    soundToggle.disabled = true;
-    try {
-      if (!soundEnabled) {
-        sprayAudio ??= createSprayAudio();
-        let timeout;
-        try {
-          await Promise.race([
-            sprayAudio.context.resume(),
-            new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('Audio unavailable')), 1800); })
-          ]);
-        } finally { clearTimeout(timeout); }
-      }
-      soundEnabled = !soundEnabled;
-      soundToggle.setAttribute('aria-pressed', String(soundEnabled));
-      soundLabel.textContent = soundEnabled ? 'צליל ספריי: פועל' : 'צליל ספריי: כבוי';
-      if (!soundEnabled) setSprayHiss(false);
-      else if (!sprayArt.classList.contains('spraying')) startSpray();
-    } catch {
-      soundEnabled = false;
-      soundToggle.setAttribute('aria-pressed', 'false');
-      soundLabel.textContent = 'הצליל לא זמין — נסו שוב';
-      setSprayHiss(false);
-    } finally { soundToggle.disabled = false; }
-  });
+// Try on every intro, including autoplay. Browser refusal never blocks animation.
+// Replay calls this inside its click handler, allowing gesture-required browsers.
+function trySprayAudio() {
+  if (motionPreference.matches || !(window.AudioContext || window.webkitAudioContext)) return;
+  try {
+    sprayAudio ??= createSprayAudio();
+    sprayAudio.context.resume().catch(() => { /* Continue silently if blocked. */ });
+  } catch { /* Audio is optional; the visual intro must always work. */ }
 }
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) setSprayHiss(false);
@@ -390,6 +362,7 @@ function moveSprayCharacter(now) {
 
 async function startSpray() {
   if (motionPreference.matches) return;
+  trySprayAudio();
   const run = ++introRun;
   skipAnimation.hidden = false;
   replayAnimation.hidden = true;
@@ -445,7 +418,6 @@ skipAnimation.addEventListener('click', () => {
 motionPreference.addEventListener('change', (event) => {
   if (event.matches) finishSpray();
   replayAnimation.hidden = event.matches;
-  soundToggle.hidden = event.matches || !(window.AudioContext || window.webkitAudioContext);
 });
 
 // A working before/after demonstration without pretending the stills are videos.

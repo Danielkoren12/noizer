@@ -15,10 +15,7 @@ let characterFrame;
 let characterGeometry;
 let introRun = 0;
 let startedAt;
-const soundToggle = document.querySelector('#sound-toggle');
-const soundLabel = document.querySelector('#sound-label');
 let sprayAudio;
-let soundEnabled = false;
 let hissPlaying = false;
 
 // A quiet aerosol hiss, synthesized locally. No sound files or network requests.
@@ -45,7 +42,7 @@ function createSprayAudio() {
 }
 
 function setSprayHiss(writing) {
-  const audible = Boolean(writing && soundEnabled && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
+  const audible = Boolean(writing && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
   if (!sprayAudio || audible === hissPlaying) return;
   hissPlaying = audible;
   const now = sprayAudio.context.currentTime;
@@ -55,33 +52,14 @@ function setSprayHiss(writing) {
   gain.linearRampToValueAtTime(audible ? 0.12 : 0, now + 0.025);
 }
 
-if (window.AudioContext || window.webkitAudioContext) {
-  soundToggle.hidden = motionPreference.matches;
-  soundToggle.addEventListener('click', async () => {
-    soundToggle.disabled = true;
-    try {
-      if (!soundEnabled) {
-        sprayAudio ??= createSprayAudio();
-        let timeout;
-        try {
-          await Promise.race([
-            sprayAudio.context.resume(),
-            new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('Audio unavailable')), 1800); })
-          ]);
-        } finally { clearTimeout(timeout); }
-      }
-      soundEnabled = !soundEnabled;
-      soundToggle.setAttribute('aria-pressed', String(soundEnabled));
-      soundLabel.textContent = soundEnabled ? 'צליל ספריי: פועל' : 'צליל ספריי: כבוי';
-      if (!soundEnabled) setSprayHiss(false);
-      else if (!sprayArt.classList.contains('spraying')) startSpray();
-    } catch {
-      soundEnabled = false;
-      soundToggle.setAttribute('aria-pressed', 'false');
-      soundLabel.textContent = 'הצליל לא זמין — נסו שוב';
-      setSprayHiss(false);
-    } finally { soundToggle.disabled = false; }
-  });
+// Try on every intro, including autoplay. Browser refusal never blocks animation.
+// Replay calls this inside its click handler, allowing gesture-required browsers.
+function trySprayAudio() {
+  if (motionPreference.matches || !(window.AudioContext || window.webkitAudioContext)) return;
+  try {
+    sprayAudio ??= createSprayAudio();
+    sprayAudio.context.resume().catch(() => { /* Continue silently if blocked. */ });
+  } catch { /* Audio is optional; the visual intro must always work. */ }
 }
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) setSprayHiss(false);
@@ -160,6 +138,7 @@ function moveSprayCharacter(now) {
 
 async function startSpray() {
   if (motionPreference.matches) return;
+  trySprayAudio();
   const run = ++introRun;
   skipAnimation.hidden = false;
   replayAnimation.hidden = true;
@@ -215,7 +194,6 @@ skipAnimation.addEventListener('click', () => {
 motionPreference.addEventListener('change', (event) => {
   if (event.matches) finishSpray();
   replayAnimation.hidden = event.matches;
-  soundToggle.hidden = event.matches || !(window.AudioContext || window.webkitAudioContext);
 });
 
 // A working before/after demonstration without pretending the stills are videos.
