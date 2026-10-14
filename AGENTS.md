@@ -12,3 +12,5 @@ The user does not want to type terminal commands. Perform supported preparation 
 Preserve existing files and the bundled licenses and notices. Exact sources and revisions are in SKILLS-SOURCES.json. Use the existing isolated checkout; do not create a Git worktree unless requested.
 
 The current user-approved baseline is the Git tag `v1.2.0-baseline`. Interpret requests to return to the baseline as referring to this tag. Preserve earlier version history. Never reset over uncommitted work; inspect and preserve it before restoring an approved version.
+
+Netlify serves the committed `public/` directory directly without a build command. After editing public source files or assets, run the project-owned `scripts/build_site.py` to synchronize public/ and include those generated files in the same commit. Refresh preview.html using scripts/build_preview.py when needed. Verify public/ contains only deployable website files and font licenses. Do not put agent instructions, tests, credentials or internal skill files there.
