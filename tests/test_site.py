@@ -2,6 +2,8 @@
 import json
 import unittest
 from pathlib import Path
+import urllib.request
+import xml.etree.ElementTree as ET
 from urllib.parse import unquote
 from playwright.sync_api import sync_playwright
 
@@ -45,6 +47,43 @@ class SiteTests(unittest.TestCase):
             target = link.get_attribute('href')
             if target != '#':
                 self.assertEqual(page.locator(target).count(), 1)
+
+    def test_search_metadata_sitemap_and_crawl_access(self):
+        page = self.page(java_script_enabled=False)
+        page.goto(URL)
+        canonical = 'https://noizer.co.il/'
+        self.assertEqual(page.locator('link[rel="canonical"]').get_attribute('href'), canonical)
+        self.assertEqual(page.locator('meta[property="og:url"]').get_attribute('content'), canonical)
+        self.assertIn('index', page.locator('meta[name="robots"]').get_attribute('content'))
+        data = json.loads(page.locator('script[type="application/ld+json"]').inner_text())
+        entities = {entry['@type']: entry for entry in data['@graph']}
+        self.assertEqual(set(entities), {'Organization', 'Service', 'WebSite'})
+        self.assertEqual(entities['Service']['provider']['@id'], entities['Organization']['@id'])
+        for entity in entities.values():
+            self.assertTrue(entity['@id'].startswith(canonical))
+            self.assertEqual(entity['url'], canonical)
+        with urllib.request.urlopen(URL + 'sitemap.xml') as response:
+            sitemap = ET.fromstring(response.read())
+        ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+        self.assertEqual([el.text for el in sitemap.findall('s:url/s:loc', ns)], [canonical])
+        with urllib.request.urlopen(URL + 'robots.txt') as response:
+            robots = response.read().decode()
+        self.assertIn('Allow: /', robots)
+        self.assertIn('Sitemap: ' + canonical + 'sitemap.xml', robots)
+
+    def test_service_faq_readable_and_keyboard_operable_without_javascript(self):
+        page = self.page(java_script_enabled=False)
+        page.goto(URL)
+        answers = page.locator('.faq-answers details')
+        self.assertEqual(answers.count(), 5)
+        self.assertTrue(answers.first.locator('p').is_visible())
+        for answer in answers.all():
+            self.assertTrue(answer.locator('p').text_content().strip())
+        second = answers.nth(1)
+        second.locator('summary').focus()
+        page.keyboard.press('Enter')
+        self.assertTrue(second.locator('p').is_visible())
+        self.assertIn('Upper Funnel', second.locator('p').inner_text())
 
     def test_intro_can_be_skipped_and_does_not_replay_on_refresh(self):
         page = self.page()
