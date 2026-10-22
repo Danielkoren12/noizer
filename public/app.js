@@ -131,7 +131,7 @@ motionPreference.addEventListener('change', (event) => {
   if (event.matches) finishSpray();
 });
 
-// A working before/after demonstration without pretending the stills are videos.
+// Banner visibility is independent of video playback.
 const bannerToggle = document.querySelector('#banner-toggle');
 const examples = document.querySelector('#examples');
 bannerToggle.hidden = false;
@@ -140,10 +140,52 @@ bannerToggle.addEventListener('click', () => {
   bannerToggle.setAttribute('aria-pressed', String(visible));
   examples.classList.toggle('no-banners', !visible);
   document.querySelector('#toggle-label').textContent = visible ? 'הסתירו את הבאנר' : 'הציגו את הבאנר';
-  document.querySelector('#toggle-status').textContent = visible ? 'הבאנר מוצג בהדמיות' : 'התוכן מוצג ללא הבאנר';
+  document.querySelector('#toggle-status').textContent = visible ? 'הבאנר מוצג בסרטונים' : 'התוכן מוצג ללא הבאנר';
   examples.querySelectorAll('.mock-banner').forEach((banner) => {
     banner.setAttribute('aria-hidden', String(!visible));
   });
+});
+
+// Native controls remain available without JavaScript. Custom controls avoid
+// covering the banner and never start playback or sound without a visitor action.
+const creatorVideos = [...document.querySelectorAll('.creator-video')];
+creatorVideos.forEach((video, index) => {
+  const frame = video.closest('.demo-frame');
+  const play = frame.querySelector('.video-play');
+  const sound = frame.querySelector('.video-sound');
+  const status = frame.querySelector('.video-status');
+  video.controls = false;
+  frame.querySelector('.video-controls').hidden = false;
+  const syncPlay = () => {
+    play.textContent = video.paused ? 'הפעילו' : 'עצרו';
+    play.setAttribute('aria-label', `${video.paused ? 'הפעילו' : 'עצרו'} סרטון ${index + 1}`);
+  };
+  play.addEventListener('click', async () => {
+    status.textContent = '';
+    if (!video.paused) { video.pause(); return; }
+    try {
+      await video.play();
+    } catch {
+      status.textContent = 'לא ניתן לנגן כרגע. נסו שוב.';
+    }
+  });
+  sound.addEventListener('click', () => {
+    video.muted = !video.muted;
+  });
+  video.addEventListener('volumechange', () => {
+    sound.textContent = video.muted ? 'קול כבוי' : 'קול פעיל';
+    sound.setAttribute('aria-pressed', String(!video.muted));
+    sound.setAttribute('aria-label', `${video.muted ? 'הפעילו' : 'כבו'} קול בסרטון ${index + 1}`);
+  });
+  video.addEventListener('play', () => {
+    creatorVideos.forEach(other => { if (other !== video) other.pause(); });
+    syncPlay();
+  });
+  video.addEventListener('pause', syncPlay);
+  video.addEventListener('ended', syncPlay);
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) creatorVideos.forEach(video => video.pause());
 });
 
 const email = 'daniel@korenf.com';

@@ -4,6 +4,7 @@ No downloads or third-party executables. Fonts and their licenses are embedded.
 """
 import base64
 import json
+import mimetypes
 import re
 from pathlib import Path
 
@@ -30,6 +31,13 @@ def build():
     for filename, mime in [('favicon.svg', 'image/svg+xml'), ('favicon-96.png', 'image/png')]:
         favicon = base64.b64encode((ROOT / 'assets' / filename).read_bytes()).decode('ascii')
         html = html.replace(f'href="assets/{filename}"', f'href="data:{mime};base64,{favicon}"')
+    # Keep user-supplied examples usable in the standalone preview as well.
+    def inline_example(match):
+        attribute, relative_path = match.groups()
+        data = base64.b64encode((ROOT / relative_path).read_bytes()).decode('ascii')
+        mime = mimetypes.guess_type(relative_path)[0] or 'application/octet-stream'
+        return f'{attribute}="data:{mime};base64,{data}"'
+    html = re.sub(r'(src|poster|href)="(assets/examples/[^"]+)"', inline_example, html)
     licenses = {path.name: path.read_text() for path in (ROOT / 'assets/fonts').glob('*.txt')}
     license_data = json.dumps(licenses, ensure_ascii=False).replace('<', '\\u003c')
     html = html.replace('</body>', f'<script type="application/json" id="bundled-font-licenses">{license_data}</script>\n<script>\n{javascript}\n</script>\n</body>')
