@@ -27,8 +27,9 @@ def build():
     html = re.sub(r'  <link rel="preload"[^>]+>\n', '', html)
     html = html.replace('<link rel="stylesheet" href="styles.css">', f'<style>\n{css}\n</style>')
     html = html.replace('<script src="app.js" defer></script>', '')
-    favicon = base64.b64encode((ROOT / 'assets/favicon.svg').read_bytes()).decode('ascii')
-    html = html.replace('href="assets/favicon.svg"', f'href="data:image/svg+xml;base64,{favicon}"')
+    for filename, mime in [('favicon.svg', 'image/svg+xml'), ('favicon-96.png', 'image/png')]:
+        favicon = base64.b64encode((ROOT / 'assets' / filename).read_bytes()).decode('ascii')
+        html = html.replace(f'href="assets/{filename}"', f'href="data:{mime};base64,{favicon}"')
     licenses = {path.name: path.read_text() for path in (ROOT / 'assets/fonts').glob('*.txt')}
     license_data = json.dumps(licenses, ensure_ascii=False).replace('<', '\\u003c')
     html = html.replace('</body>', f'<script type="application/json" id="bundled-font-licenses">{license_data}</script>\n<script>\n{javascript}\n</script>\n</body>')
