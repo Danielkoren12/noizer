@@ -59,11 +59,9 @@
 .spraying .spray-character{left:0;top:0;right:auto;bottom:auto;will-change:transform}
 .paint-stream{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:3}
 #paint-trail{opacity:0}
-.replay-animation{position:absolute;bottom:-18px;left:0;min-height:44px;border:0;border-bottom:1px solid currentColor;color:var(--subtle);background:transparent;font-size:12px;padding:7px 0;direction:rtl}
-.replay-animation .inline-arrow{width:15px;height:15px;margin-right:4px}
-@media(max-width:760px){.spray-character{--kid-rest-right:20px;--kid-rest-bottom:52px;width:58px}.replay-animation{bottom:0;font-size:11px}}
+@media(max-width:760px){.spray-character{--kid-rest-right:20px;--kid-rest-bottom:52px;width:58px}}
 @media(max-width:410px){.spray-character{--kid-rest-right:16px;width:54px}}
-@media(prefers-reduced-motion:reduce){.paint-stream,.replay-animation{display:none!important}.spray-character{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.paint-stream{display:none!important}.spray-character{transform:none!important}}
 
 .spray-art .art-note{bottom:56px}
 
@@ -74,7 +72,7 @@
 @keyframes kid-step{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
 
 .animation-controls{position:absolute;bottom:-18px;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.animation-controls .skip-animation,.animation-controls .replay-animation{position:static}
+.animation-controls .skip-animation{position:static}
 @media(max-width:760px){.animation-controls{bottom:0;gap:8px}}
 
 .service-faq{display:grid;grid-template-columns:1fr 1.65fr;gap:64px;margin-top:76px;padding-top:42px;border-top:1px solid #e6e8ee}
@@ -193,7 +191,6 @@
         <span class="art-note" lang="en">a little noise. <br> a lot of presence.</span>
         <div class="animation-controls">
           <button class="skip-animation" id="skip-animation" type="button" hidden>דלגו על האנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></button>
-          <button class="replay-animation" id="replay-animation" type="button" hidden>צפו שוב באנימציה <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button>
         </div>
       </div>
       <div class="hero-foot"><span><i aria-hidden="true"></i> תוכן אמיתי. נוכחות חדשה.</span><span dir="ltr" lang="en">REELS / SHORTS / REAL PEOPLE</span><a href="#examples" aria-label="המשיכו לדוגמאות"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a></div>
@@ -243,7 +240,7 @@
         <li><span class="step-number" aria-hidden="true">2</span><h3>משלבים באנר <br> בתוכן</h3><p>מתאמים את הקמפיין ומשלבים באנר ממותג בסרטונים שהיוצרים ממילא מעלים.</p></li>
         <li><span class="step-number" aria-hidden="true">3</span><h3>מודדים צפיות <br> ומדווחים</h3><p>אוספים נתוני ביצועים ומדווחים לכם. התשלום לפי צפיות, במסגרת תקציב מוסכמת.</p></li>
       </ol>
-      <div class="how-bottom"><p>אתם מביאים את המותג. אנחנו מנהלים את כל התהליך.</p><span>חשיפה ומודעות למותג <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg> <bdi lang="en">Upper Funnel</bdi></span></div>
+      <div class="how-bottom"><p>אתם מביאים את המותג. אנחנו מנהלים את כל התהליך.</p><span>חשיפה ומודעות למותג</span></div>
       <div class="service-faq" aria-labelledby="faq-title">
         <div class="faq-heading"><h3 id="faq-title">עוד קצת על <br> הרעש שלנו.</h3><p>שאלות על פרסום עם יוצרי תוכן.</p></div>
         <div class="faq-answers">
@@ -297,7 +294,6 @@
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const sprayArt = document.querySelector('#spray-art');
 const skipAnimation = document.querySelector('#skip-animation');
-const replayAnimation = document.querySelector('#replay-animation');
 const sprayCharacter = document.querySelector('#spray-character');
 const paintTrail = document.querySelector('#paint-trail');
 const sprayLines = [...document.querySelectorAll('.spray-line')];
@@ -308,58 +304,6 @@ let characterFrame;
 let characterGeometry;
 let introRun = 0;
 let startedAt;
-let sprayAudio;
-let hissPlaying = false;
-
-// A quiet aerosol hiss, synthesized locally. No sound files or network requests.
-function createSprayAudio() {
-  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-  const context = new AudioContextClass();
-  const noise = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
-  const samples = noise.getChannelData(0);
-  for (let i = 0; i < samples.length; i++) samples[i] = Math.random() * 2 - 1;
-  const source = context.createBufferSource();
-  source.buffer = noise;
-  source.loop = true;
-  const highpass = context.createBiquadFilter();
-  highpass.type = 'highpass';
-  highpass.frequency.value = 1400;
-  const lowpass = context.createBiquadFilter();
-  lowpass.type = 'lowpass';
-  lowpass.frequency.value = 8500;
-  const gain = context.createGain();
-  gain.gain.value = 0;
-  source.connect(highpass).connect(lowpass).connect(gain).connect(context.destination);
-  source.start();
-  return { context, source, gain };
-}
-
-function setSprayHiss(writing) {
-  const audible = Boolean(writing && !document.hidden && document.hasFocus() && sprayAudio?.context.state === 'running');
-  if (!sprayAudio || audible === hissPlaying) return;
-  hissPlaying = audible;
-  const now = sprayAudio.context.currentTime;
-  const gain = sprayAudio.gain.gain;
-  gain.cancelScheduledValues(now);
-  gain.setValueAtTime(gain.value, now);
-  gain.linearRampToValueAtTime(audible ? 0.12 : 0, now + 0.025);
-}
-
-// Try on every intro, including autoplay. Browser refusal never blocks animation.
-// Replay calls this inside its click handler, allowing gesture-required browsers.
-function trySprayAudio() {
-  if (motionPreference.matches || !(window.AudioContext || window.webkitAudioContext)) return;
-  try {
-    sprayAudio ??= createSprayAudio();
-    sprayAudio.context.resume().catch(() => { /* Continue silently if blocked. */ });
-  } catch { /* Audio is optional; the visual intro must always work. */ }
-}
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) setSprayHiss(false);
-});
-window.addEventListener('blur', () => setSprayHiss(false));
-window.addEventListener('pagehide', () => setSprayHiss(false));
-
 function measureCharacterPath() {
   const wall = document.querySelector('.spray-wall');
   const style = getComputedStyle(wall);
@@ -421,7 +365,6 @@ function moveSprayCharacter(now) {
   sprayCharacter.classList.toggle('is-walking', localTime < WRITE_MS || returning);
   paintTrail.setAttribute('d', `M${x + nozzleOffsetX} ${y + nozzleOffsetY} L${target.x} ${target.y}`);
   paintTrail.style.opacity = !returning && localTime < WRITE_MS ? '0.7' : '0';
-  setSprayHiss(!returning && localTime < WRITE_MS);
   if (elapsed >= TOTAL_MS) {
     finishSpray();
     return;
@@ -431,10 +374,8 @@ function moveSprayCharacter(now) {
 
 async function startSpray() {
   if (motionPreference.matches) return;
-  trySprayAudio();
   const run = ++introRun;
   skipAnimation.hidden = false;
-  replayAnimation.hidden = true;
   // Measure the actual loaded letterforms so no font swap shifts the paint path.
   await document.fonts.ready;
   if (run !== introRun || motionPreference.matches) return;
@@ -445,7 +386,6 @@ async function startSpray() {
 }
 
 function finishSpray() {
-  setSprayHiss(false);
   introRun++;
   cancelAnimationFrame(characterFrame);
   sprayArt.classList.remove('spraying');
@@ -454,7 +394,6 @@ function finishSpray() {
   sprayLines.forEach((line) => { line.style.clipPath = ''; });
   paintTrail.style.opacity = '0';
   skipAnimation.hidden = true;
-  replayAnimation.hidden = motionPreference.matches;
 }
 
 // Session storage means a refresh or return to the page does not replay the intro.
@@ -467,13 +406,7 @@ try {
 
 if (!hasSeenIntro && !motionPreference.matches) {
   startSpray();
-} else {
-  replayAnimation.hidden = motionPreference.matches;
 }
-replayAnimation.addEventListener('click', () => {
-  startSpray();
-  skipAnimation.focus({ preventScroll: true });
-});
 window.addEventListener('resize', () => {
   if (sprayArt.classList.contains('spraying')) measureCharacterPath();
 });
@@ -486,7 +419,6 @@ skipAnimation.addEventListener('click', () => {
 });
 motionPreference.addEventListener('change', (event) => {
   if (event.matches) finishSpray();
-  replayAnimation.hidden = event.matches;
 });
 
 // A working before/after demonstration without pretending the stills are videos.

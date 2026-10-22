@@ -144,11 +144,12 @@ class SiteTests(unittest.TestCase):
         page.locator('#skip-animation').click()
         self.assertEqual(page.locator('#spray-character').get_attribute('style'), '')
         self.assertEqual(page.locator('#paint-trail').evaluate('(el) => getComputedStyle(el).opacity'), '0')
-        page.locator('#replay-animation').click()
+        page = self.page()
+        page.goto(URL)
         self.assertTrue(page.locator('#skip-animation').is_visible())
         page.emulate_media(reduced_motion='reduce')
         page.wait_for_function("!document.querySelector('#spray-art').classList.contains('spraying')")
-        self.assertFalse(page.locator('#replay-animation').is_visible())
+        self.assertEqual(page.locator('#replay-animation').count(), 0)
         self.assertEqual(page.locator('#spray-character').get_attribute('style'), '')
 
     def test_banner_comparison_and_status(self):
@@ -166,43 +167,30 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(button.get_attribute('aria-pressed'), 'true')
         self.assertEqual(page.locator('.mock-banner').first.get_attribute('aria-hidden'), 'false')
 
-    def test_spray_audio_starts_automatically_when_allowed_and_stops_on_return_and_skip(self):
-        browser = self.playwright.chromium.launch(executable_path='/usr/bin/chromium',
-            args=['--no-sandbox', '--autoplay-policy=no-user-gesture-required'])
-        self.addCleanup(browser.close)
-        page = browser.new_page()
+    def test_intro_is_silent_without_replay_control(self):
+        page = self.page()
+        page.add_init_script("""
+            window.audioContextCreations = 0;
+            for (const name of ['AudioContext', 'webkitAudioContext']) {
+                const Original = window[name];
+                if (Original) window[name] = new Proxy(Original, {
+                    construct(target, args) {
+                        window.audioContextCreations++;
+                        return Reflect.construct(target, args);
+                    }
+                });
+            }
+        """)
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
         page.goto(URL)
-        self.assertEqual(page.locator('#sound-toggle').count(), 0)
-        page.wait_for_function('sprayAudio && sprayAudio.context.state === "running"')
-        page.evaluate('''() => {
-            cancelAnimationFrame(characterFrame);
-            moveSprayCharacter(startedAt + 850);
-            cancelAnimationFrame(characterFrame);
-            window.audioMeter = sprayAudio.context.createAnalyser();
-            window.audioMeter.fftSize = 2048;
-            sprayAudio.gain.connect(window.audioMeter);
-            window.audioMeter.connect(sprayAudio.context.destination);
-        }''')
-        page.wait_for_timeout(130)
-        def rms():
-            return page.evaluate('''() => {
-                const data = new Float32Array(window.audioMeter.fftSize);
-                window.audioMeter.getFloatTimeDomainData(data);
-                return Math.sqrt(data.reduce((sum, value) => sum + value * value, 0) / data.length);
-            }''')
-        self.assertGreater(rms(), 0.001)
-        page.evaluate('''() => {
-            moveSprayCharacter(startedAt + 1900);
-            cancelAnimationFrame(characterFrame);
-        }''')
-        page.wait_for_timeout(130)
-        self.assertLess(rms(), 0.00001)
-        page.locator('#skip-animation').click()
-        self.assertFalse(page.evaluate('hissPlaying'))
-        page.locator('#replay-animation').click()
-        page.wait_for_function('hissPlaying')
-        page.locator('#skip-animation').click()
-        self.assertFalse(page.evaluate('hissPlaying'))
+        page.wait_for_function("document.querySelector('#spray-art').classList.contains('spraying')")
+        page.wait_for_function("!document.querySelector('#spray-art').classList.contains('spraying')")
+        self.assertTrue(page.locator('.spray-third').is_visible())
+        self.assertEqual(page.evaluate('audioContextCreations'), 0)
+        self.assertEqual(page.locator('audio, video, #sound-toggle, #replay-animation').count(), 0)
+        self.assertEqual(page.locator('.how-bottom span').inner_text(), 'חשיפה ומודעות למותג')
+        self.assertEqual(errors, [])
 
     def test_contact_routes_are_real_and_distinct(self):
         page = self.page()
