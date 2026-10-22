@@ -89,3 +89,11 @@
 .video-control-icon .pause-mark{stroke-width:2.7}
 .video-play[data-playing="false"] .pause-mark,.video-play[data-playing="true"] .play-mark,.video-sound[aria-pressed="false"] .sound-waves,.video-sound[aria-pressed="true"] .sound-slash{display:none}
 @media(hover:hover) and (pointer:fine){.video-controls button:hover{transform:scale(1.08)}}
+
+.site-footer{flex-wrap:wrap}
+.footer-socials{display:flex;align-items:center;gap:18px}
+.footer-socials a{display:inline-flex;align-items:center;gap:7px;min-height:44px;color:var(--ink);font-size:12px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:transparent;transition:color 160ms ease-out,text-decoration-color 160ms ease-out}
+.footer-socials svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.footer-socials .social-dot{fill:currentColor;stroke:none}
+@media(hover:hover) and (pointer:fine){.footer-socials a:hover{color:var(--blue);text-decoration-color:currentColor}}
+@media(max-width:760px){.site-footer{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.site-footer>span[lang],.footer-copyright{justify-self:end}.footer-socials{gap:14px}.footer-socials a{font-size:11px;gap:5px}.footer-socials svg{width:20px;height:20px}}

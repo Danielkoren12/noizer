@@ -187,7 +187,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) creatorVideos.forEach(video => video.pause());
 });
 
-const email = 'daniel@korenf.com';
+const email = 'daniel@noizer.co.il';
 const contactRoutes = {
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
