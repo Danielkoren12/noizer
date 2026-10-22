@@ -72,10 +72,10 @@
 .demo-photo{overflow:hidden;background:var(--ink)}
 .creator-video{display:block;width:100%;height:100%;object-fit:cover;border-radius:inherit}
 .video-controls{position:absolute;top:10px;left:10px;right:10px;display:flex;gap:6px;justify-content:flex-end;pointer-events:none}
-.video-controls button{pointer-events:auto;min-height:44px;min-width:44px;padding:6px 10px;border:1px solid #ffffff70;border-radius:6px;background:#101725e8;color:white;font-size:11px;font-weight:500}
+.video-controls button{pointer-events:auto;display:grid;place-items:center;width:44px;height:44px;min-height:44px;min-width:44px;padding:4px;border:0;border-radius:50%;background:transparent;color:white;filter:drop-shadow(0 1px 2px #000b);transition:transform 160ms var(--ease)}
 .video-controls button:active{transform:scale(.97)}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-@media(max-width:410px){.video-controls{top:6px;left:6px;right:6px;gap:4px}.video-controls button{font-size:10px;padding-inline:5px}}
+@media(max-width:410px){.video-controls{top:6px;left:6px;right:6px;gap:4px}}
 
 /* Preserve the original banner strip: full frame width, 60px high, 28px up. */
 .real-banner{height:60px;min-height:60px;padding:0;overflow:hidden;pointer-events:none}
@@ -83,3 +83,9 @@
 .banner-velqor{background:#001021}
 .banner-roamiq{background:#ff727d}
 @media(max-width:760px){.real-banner{height:47px;min-height:47px;bottom:22px}.real-banner img{object-fit:contain}}
+
+.video-control-icon{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.video-control-icon .play-mark{fill:currentColor;stroke:none}
+.video-control-icon .pause-mark{stroke-width:2.7}
+.video-play[data-playing="false"] .pause-mark,.video-play[data-playing="true"] .play-mark,.video-sound[aria-pressed="false"] .sound-waves,.video-sound[aria-pressed="true"] .sound-slash{display:none}
+@media(hover:hover) and (pointer:fine){.video-controls button:hover{transform:scale(1.08)}}

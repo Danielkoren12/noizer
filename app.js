@@ -157,7 +157,7 @@ creatorVideos.forEach((video, index) => {
   video.controls = false;
   frame.querySelector('.video-controls').hidden = false;
   const syncPlay = () => {
-    play.textContent = video.paused ? 'הפעילו' : 'עצרו';
+    play.dataset.playing = String(!video.paused);
     play.setAttribute('aria-label', `${video.paused ? 'הפעילו' : 'עצרו'} סרטון ${index + 1}`);
   };
   play.addEventListener('click', async () => {
@@ -173,7 +173,6 @@ creatorVideos.forEach((video, index) => {
     video.muted = !video.muted;
   });
   video.addEventListener('volumechange', () => {
-    sound.textContent = video.muted ? 'קול כבוי' : 'קול פעיל';
     sound.setAttribute('aria-pressed', String(!video.muted));
     sound.setAttribute('aria-label', `${video.muted ? 'הפעילו' : 'כבו'} קול בסרטון ${index + 1}`);
   });
