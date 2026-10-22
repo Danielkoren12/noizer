@@ -14,7 +14,7 @@
 @media(max-width:410px){.site-header nav>a:first-child{display:none}.site-header nav{gap:15px}.brand{width:100px}.hero-actions{gap:16px}.hero-actions .button{padding-inline:16px;gap:14px}.hero-actions .creator-link{font-size:12px;gap:7px}.hero h1{font-size:76px}.hero .last-line{margin-right:4px}.spray-art{height:345px}.spray-kid{width:128px}.spray-wall{left:0;top:48px}.spray-third{margin-left:19px}.spray-second{margin-left:4px}.art-note{left:28px;font-size:13px}.hero-foot>span[lang]{display:none}.how-heading h2{font-size:56px}.contact h2{font-size:60px}.example-composition{gap:21px}.mock-banner{flex-direction:column;gap:0;align-items:flex-start}.mock-banner small{font-size:8px}.section-top h2{font-size:60px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.spray-line{clip-path:none!important}.spray-mist{opacity:0!important}.skip-animation{display:none!important}}
 
-/* Real brand artwork and creator videos are intentionally pending, never AI stand-ins. */
+/* Text wordmark remains until the original NOIZER logo file is supplied. */
 .wordmark{display:block;font-family:var(--hand);font-size:33px;line-height:1.3;transform:rotate(-6deg);color:var(--ink);position:relative}.wordmark:after{content:"";display:block;height:5px;background:var(--blue);width:96%;clip-path:polygon(0 25%,100% 0,95% 80%,3% 100%);margin-top:1px}.footer-brand .wordmark{font-size:25px}.empty-video{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#53658e;text-align:center;font-family:var(--display);font-size:49px;line-height:1.1;padding-bottom:48px}.empty-video small{font-family:var(--body);font-size:10px;line-height:1.6;margin-top:18px}.banner-light{background:var(--ink);color:white}.frame-meta svg{stroke:var(--blue)}
 @media(max-width:760px){.wordmark{font-size:28px}.empty-video{font-size:39px}.empty-video small{font-size:9px;margin-top:12px}}
 @media(max-width:410px){.wordmark{font-size:25px}.empty-video{font-size:34px}.empty-video small{font-size:8px}}
@@ -76,3 +76,10 @@
 .video-controls button:active{transform:scale(.97)}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:410px){.video-controls{top:6px;left:6px;right:6px;gap:4px}.video-controls button{font-size:10px;padding-inline:5px}}
+
+/* Preserve the original banner strip: full frame width, 60px high, 28px up. */
+.real-banner{height:60px;min-height:60px;padding:0;overflow:hidden;pointer-events:none}
+.real-banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.banner-velqor{background:#001021}
+.banner-roamiq{background:#ff727d}
+@media(max-width:760px){.real-banner{height:47px;min-height:47px;bottom:22px}.real-banner img{object-fit:contain}}

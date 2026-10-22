@@ -5,7 +5,7 @@ from pathlib import Path
 import urllib.request
 import xml.etree.ElementTree as ET
 from urllib.parse import unquote
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 
 URL = 'http://127.0.0.1:4173/'
@@ -215,7 +215,7 @@ class SiteTests(unittest.TestCase):
         self.assertFalse(videos.first.evaluate('(v) => v.paused'))
         first.locator('.video-sound').click()
         self.assertFalse(videos.first.evaluate('(v) => v.muted'))
-        self.assertEqual(first.locator('.video-sound').get_attribute('aria-pressed'), 'true')
+        expect(first.locator('.video-sound')).to_have_attribute('aria-pressed', 'true')
         page.locator('.demo-two .video-play').click()
         page.wait_for_function("document.querySelector('#creator-two').currentTime > 0.1")
         self.assertTrue(videos.first.evaluate('(v) => v.paused'))
@@ -270,11 +270,22 @@ class SiteTests(unittest.TestCase):
                 self.assertEqual(bad_responses, [])
                 self.assertTrue(all(url.startswith(URL) for url in requests))
                 self.assertTrue(page.evaluate('document.fonts.check("700 32px Karantina")'))
-                self.assertEqual(page.locator('img').count(), 0)
+                self.assertEqual(page.locator('.real-banner img').count(), 2)
+                page.locator('#examples').scroll_into_view_if_needed()
+                page.wait_for_function("[...document.querySelectorAll('.real-banner img')].every(img => img.complete && img.naturalWidth === 2172)")
                 self.assertEqual(page.locator('.character-placeholder').count(), 0)
                 self.assertTrue(page.locator('#spray-character').is_visible())
                 self.assertEqual(page.locator('.empty-video').count(), 0)
                 self.assertEqual(page.locator('.creator-video').count(), 2)
+                for banner in page.locator('.real-banner').all():
+                    dimensions = banner.evaluate("""el => ({
+                        height: el.clientHeight, width: el.clientWidth,
+                        frameWidth: el.closest('.demo-frame').clientWidth,
+                        bottom: getComputedStyle(el).bottom
+                    })""")
+                    self.assertEqual(dimensions['height'], 47 if width <= 760 else 60)
+                    self.assertEqual(dimensions['bottom'], '22px' if width <= 760 else '28px')
+                    self.assertEqual(dimensions['width'], dimensions['frameWidth'])
                 page.close()
 
     def test_portable_preview_without_resource_access(self):
