@@ -13,3 +13,5 @@
 - Permanent Marker, Font Diner — Apache License 2.0. המקור: `apache/permanentmarker/PermanentMarker-Regular.ttf`.
 
 הרישיונות נשמרו במלואם לצד הפונטים תחת `fonts/`. יש לשמור אותם בעת הפצה.
+
+`noizer-share.png` היא תמונת השיתוף במידות 1200×630: סימן NOIZER הקיים באתר על רקע לבן, מרונדר מה־HTML וה־CSS באמצעות Chromium. אין שימוש בתמונות הבאנרים או ביצירת תמונות AI בתמונת השיתוף.
