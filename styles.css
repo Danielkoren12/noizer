@@ -96,4 +96,4 @@
 .footer-socials svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
 .footer-socials .social-dot{fill:currentColor;stroke:none}
 @media(hover:hover) and (pointer:fine){.footer-socials a:hover{color:var(--blue);text-decoration-color:currentColor}}
-@media(max-width:760px){.site-footer{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.site-footer>span[lang],.footer-copyright{justify-self:end}.footer-socials{gap:14px}.footer-socials a{font-size:11px;gap:5px}.footer-socials svg{width:20px;height:20px}}
+@media(max-width:760px){.site-footer{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.site-footer>span[lang],.footer-copyright{justify-self:end}.footer-socials{grid-column:1/-1;justify-content:center;gap:14px}.footer-copyright{grid-column:1/-1;justify-self:center}.footer-socials a{font-size:11px;gap:5px}.footer-socials svg{width:20px;height:20px}}
