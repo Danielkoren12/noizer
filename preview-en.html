@@ -153,64 +153,98 @@ html[lang=en] .section-top h2{max-width:650px}
   html[lang=en] .hero h1 br:nth-of-type(2){display:block}
 }
 
-/* Partnership Ads: editorial typography and a written campaign example. */
+/* Service links also fit the home navigation on tablets and small phones. */
 .service-nav{white-space:nowrap}
 .site-header nav [aria-current=page]{color:var(--blue);text-decoration:underline;text-underline-offset:6px}
-.partnership-hero{display:grid;grid-template-columns:1.35fr 1fr;align-items:center;gap:60px;padding-block:64px 90px}
-.partnership-eyebrow{font-size:11px;letter-spacing:.08em;font-weight:500;color:var(--subtle);margin-bottom:24px;text-align:start}
-.partnership-hero h1{font-size:clamp(76px,7.5vw,108px);line-height:1.02}
-.partnership-description{font-size:17px;line-height:1.85;max-width:570px;margin-top:32px;color:#353c48}
-.partnership-scope{font-size:15px;line-height:1.85;max-width:570px;margin-top:16px;color:var(--subtle)}
-.partnership-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:28px}
-.partnership-example-link{font-size:13px;font-weight:500;min-height:44px;display:inline-flex;align-items:center;text-decoration:underline}
-.partnership-mark{position:relative;font-family:var(--hand);font-size:clamp(30px,3.7vw,52px);line-height:1.22;transform:rotate(-7deg);justify-self:center;padding:32px 8px 50px;max-width:100%}
-.partnership-mark span{display:block}.partnership-mark span:first-child{color:var(--blue)}
-.partnership-mark b{display:block;font-family:var(--body);font-size:44px;font-weight:400;line-height:1.4;color:var(--blue)}
-.partnership-mark svg{position:absolute;bottom:20px;left:0;width:100%;height:26px;stroke:var(--blue);stroke-width:4;fill:none;stroke-linecap:round}
-.partnership-value{padding-block:32px 90px}
-.partnership-value h2{font-size:clamp(48px,4.9vw,68px);max-width:800px;line-height:1.05}
-.partnership-benefits{list-style:none;padding:0;margin:42px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:42px}
-.partnership-benefits li{border-top:2px solid var(--blue);padding-top:16px}
-.partnership-index{font-family:var(--hand);font-size:18px;color:var(--blue)}
-.partnership-benefits h3{font-family:var(--display);font-size:38px;line-height:1.1;margin-top:20px}
-.partnership-benefits p{font-size:15px;line-height:1.8;color:var(--subtle);margin-top:12px;max-width:340px}
-.partnership-example{background:var(--blue);color:white;padding-block:72px}
-.partnership-example-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:100px}
-.partnership-example-label{display:inline-block;font-size:12px;border-bottom:1px solid #ffffff90;padding-bottom:6px;margin-bottom:22px}
-.partnership-example h2{font-size:clamp(60px,6vw,84px);line-height:1.02}
-.partnership-story{font-size:16px;line-height:1.85;margin-top:24px;max-width:420px}
-.partnership-timeline{list-style:none;margin:0;padding:0;display:grid;gap:28px}
-.partnership-timeline li{display:grid;grid-template-columns:42px 1fr;gap:20px;padding-top:22px;border-top:1px solid #ffffff60}
-.partnership-timeline li>span{font-family:var(--hand);font-size:20px}
-.partnership-timeline h3{font-family:var(--display);font-size:38px;line-height:1.1}
-.partnership-timeline p{font-size:15px;line-height:1.8;margin-top:9px;max-width:480px}
-.partnership-permission{font-size:12px;line-height:1.8;color:#e2e8ff;margin-top:28px}
-.partnership-contact-intro{font-size:16px;line-height:1.8;margin-top:24px;max-width:550px;color:#dce0e8}
-.partnership-contact .button{margin-top:26px}
-.blue-to-ink{--edge-from:var(--blue);--edge-to:var(--ink)}
-html[lang=en] .partnership-benefits h3,html[lang=en] .partnership-timeline h3{text-transform:uppercase}
-html[lang=en] .partnership-actions svg,html[lang=en] .partnership-contact .button svg{transform:scaleX(-1)}
 @media(min-width:761px) and (max-width:1100px){
   .site-header{display:grid;grid-template-columns:1fr auto;gap:12px 20px;padding-block:20px;min-height:0}
   .header-actions{display:contents}.site-header .brand{grid-row:1;grid-column:1}
   .language-switch{grid-row:1;grid-column:2}.site-header nav{grid-row:2;grid-column:1/-1;justify-content:space-between}
 }
+@media(max-width:760px){.site-header nav{flex-wrap:wrap;row-gap:6px}.site-header nav .service-nav{font-size:11px}}
+
+/* Partnership Ads has its own composition: a creator lineup feeding one campaign. */
+.campaign-hero{padding-block:46px 70px}
+.campaign-format{font-size:14px;color:var(--ink);margin-bottom:28px;text-align:start}
+.campaign-hero h1{font-size:clamp(100px,11vw,152px);line-height:.92;letter-spacing:-.015em}
+.campaign-hero h1 span{color:var(--blue)}
+.campaign-hero-bottom{display:grid;grid-template-columns:1.35fr 1fr;gap:70px;align-items:end;margin-top:38px}
+.campaign-lede{font-size:19px;line-height:1.75;max-width:680px}
+.campaign-definition{font-size:14px;line-height:1.85;max-width:650px;margin-top:16px;color:var(--subtle)}
+.campaign-hero-actions{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.campaign-hero-actions>a:not(.button){font-size:13px;min-height:44px;display:inline-flex;align-items:center;text-decoration:underline;text-underline-offset:5px}
+.campaign-visual{padding-block:12px 52px}
+.campaign-visual-heading{display:flex;align-items:baseline;justify-content:space-between;gap:22px;margin-bottom:24px}
+.campaign-visual-heading h2{font-size:clamp(40px,4vw,56px);line-height:1.05}
+.campaign-example-label{font-size:12px;color:var(--subtle);flex-shrink:0}
+.campaign-map{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1.1fr) 64px minmax(0,1fr);align-items:center;gap:16px;background:#f1f4ff;padding:40px 30px;margin:0}
+.campaign-creators h3{font-size:14px;font-weight:500;margin-bottom:20px}
+.campaign-creators ul{list-style:none;padding:0;margin:0;display:grid;gap:16px}
+.campaign-creators li{background:white;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px}
+.campaign-creators li:nth-child(1){transform:rotate(-2deg)}
+.campaign-creators li:nth-child(3){transform:rotate(2deg)}
+.campaign-creators li>span{font-family:var(--display);font-size:36px;line-height:1.1}
+.campaign-creators small{font-size:12px;line-height:1.5;color:var(--subtle)}
+.campaign-merge,.campaign-forward{width:100%;height:auto;fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.campaign-merge-mobile{display:none;fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[dir=rtl] .campaign-merge,html[dir=rtl] .campaign-forward{transform:scaleX(-1)}
+.campaign-one{text-align:center}
+.campaign-one>p{font-family:var(--display);font-size:clamp(66px,6.6vw,92px);font-weight:700;line-height:.95;color:var(--blue);text-wrap:balance}
+.campaign-one>span{display:block;font-size:12px;margin-top:20px;line-height:1.6}
+.campaign-management h3{font-family:var(--display);font-size:40px;line-height:1.05;margin-bottom:22px}
+.campaign-management ul{list-style:none;padding:0;margin:0;display:grid;gap:16px;font-size:15px;line-height:1.6}
+.campaign-written-example{display:grid;grid-template-columns:1fr 2fr;gap:40px;align-items:start;padding-top:28px}
+.campaign-written-example h3{font-size:17px;font-weight:500;line-height:1.65}
+.campaign-written-example p{font-size:15px;line-height:1.9;max-width:760px;color:var(--subtle)}
+.campaign-permission{font-size:12px;color:var(--subtle);line-height:1.8;margin-top:20px}
+.campaign-roles{display:grid;grid-template-columns:1fr 1.25fr;gap:100px;padding-block:58px 76px}
+.campaign-roles h2{font-size:clamp(56px,5.7vw,80px);line-height:.98}
+.campaign-roles-intro{font-size:16px;line-height:1.8;max-width:360px;margin-top:24px}
+.campaign-role-list{margin:0;display:grid;gap:30px;align-self:center}
+.campaign-role-list>div{display:grid;grid-template-columns:135px 1fr;gap:26px}
+.campaign-role-list dt{font-family:var(--display);font-size:36px;line-height:1.1}
+.campaign-role-list dt span[lang=en]{font-family:var(--hand);font-size:24px}
+.campaign-role-list dt small{font-family:var(--body);font-size:12px;color:var(--subtle);display:block;margin-top:10px}
+.campaign-role-list dd{font-size:15px;line-height:1.85;margin:0;max-width:520px}
+.campaign-close{display:grid;grid-template-columns:1fr 1.1fr;gap:100px;padding-block:55px 90px;color:var(--ink)}
+.campaign-close h2{font-size:clamp(74px,7vw,100px);line-height:.95;color:var(--blue)}
+.campaign-close-details>p{font-size:17px;line-height:1.8;max-width:520px}
+.campaign-close .button{margin-top:24px}
+.campaign-close .direct-contact{margin-top:26px;gap:12px 28px}
+.campaign-close .email-line button,.campaign-close .email-line #copy-status{color:var(--ink)}
+.campaign-close .email-line>a{color:var(--ink);text-decoration-color:var(--blue)}
+html[lang=en] .campaign-creators li>span,html[lang=en] .campaign-one>p,html[lang=en] .campaign-management h3{text-transform:uppercase}
+html[lang=en] .campaign-hero-actions svg,html[lang=en] .campaign-close .button svg{transform:scaleX(-1)}
+@media(max-width:1100px) and (min-width:761px){
+  .campaign-hero-bottom{gap:36px}.campaign-map{gap:12px;padding:30px 20px;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr) 36px minmax(0,1fr)}
+  .campaign-creators li{display:block}.campaign-creators small{display:block;margin-top:4px}.campaign-management h3{font-size:32px}.campaign-management ul{font-size:13px}
+  .campaign-roles,.campaign-close{gap:45px}.campaign-role-list>div{grid-template-columns:100px 1fr;gap:20px}
+}
 @media(max-width:760px){
-  .site-header nav{flex-wrap:wrap;row-gap:6px}.site-header nav .service-nav{font-size:11px}
-  .partnership-hero{grid-template-columns:1fr;gap:28px;padding-block:36px 52px}
-  .partnership-eyebrow{font-size:9px;letter-spacing:.035em;margin-bottom:20px}
-  .partnership-hero h1{font-size:clamp(66px,14vw,88px)}
-  .partnership-description{font-size:16px;margin-top:26px}.partnership-scope{font-size:14px}
-  .partnership-mark{display:flex;align-items:center;gap:14px;font-size:clamp(17px,4.7vw,30px);padding:20px 0 36px}
-  .partnership-mark b{font-size:27px}.partnership-mark svg{bottom:10px}
-  .partnership-value{padding-block:24px 52px}.partnership-value h2{font-size:48px}
-  .partnership-benefits{grid-template-columns:1fr;gap:28px;margin-top:30px}
-  .partnership-benefits h3{font-size:34px;margin-top:12px}.partnership-benefits p{font-size:14px;max-width:100%}
-  .partnership-example{padding-block:50px}.partnership-example-layout{grid-template-columns:1fr;gap:36px}
-  .partnership-example h2{font-size:62px}.partnership-story{font-size:15px;margin-top:22px}
-  .partnership-timeline li{gap:14px;grid-template-columns:34px 1fr}.partnership-timeline h3{font-size:34px}.partnership-timeline p{font-size:14px}
-  .partnership-contact-intro{font-size:15px}.partnership-contact h2{font-size:clamp(52px,12.5vw,68px)}
-  .partnership-actions .button,.partnership-contact .button{font-size:13px;gap:14px;padding-inline:16px}
+  .campaign-hero{padding-block:30px 40px}.campaign-format{font-size:11px;margin-bottom:24px}
+  .campaign-hero h1{font-size:clamp(74px,19vw,100px)}
+  html[lang=en] .campaign-hero h1{font-size:clamp(56px,14.8vw,84px)}
+  .campaign-hero-bottom{grid-template-columns:1fr;gap:22px;margin-top:28px}
+  .campaign-lede{font-size:17px;line-height:1.8}.campaign-definition{font-size:13px;line-height:1.85;margin-top:14px}
+  .campaign-hero-actions{gap:4px}.campaign-hero-actions .button,.campaign-close .button{font-size:13px;gap:14px;padding-inline:16px}
+  .campaign-visual{padding-block:0 32px}.campaign-visual-heading{display:block;margin-bottom:20px}.campaign-visual-heading h2{font-size:40px}
+  .campaign-example-label{display:block;margin-top:12px}
+  .campaign-map{grid-template-columns:minmax(0,1fr);gap:12px;padding:24px 16px}
+  .campaign-creators h3{text-align:center;font-size:13px;margin-bottom:18px}
+  .campaign-creators ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .campaign-creators li{display:block;text-align:center;padding:12px 5px}
+  .campaign-creators li>span{font-size:27px}.campaign-creators small{display:block;font-size:11px;margin-top:7px}
+  .campaign-merge{display:none}.campaign-merge-mobile{display:block;width:100%;height:58px}
+  .campaign-one>p{font-size:68px}.campaign-one>span{margin-top:14px;font-size:12px}
+  .campaign-forward,html[dir=rtl] .campaign-forward{width:52px;height:52px;justify-self:center;transform:rotate(90deg)}
+  .campaign-management{text-align:center}.campaign-management h3{font-size:34px;margin-bottom:16px}.campaign-management ul{font-size:15px;gap:8px}
+  .campaign-written-example{grid-template-columns:1fr;gap:10px;padding-top:24px}.campaign-written-example h3{font-size:16px}.campaign-written-example p{font-size:14px;line-height:1.9}
+  .campaign-permission{font-size:11px;margin-top:16px}
+  .campaign-roles{grid-template-columns:1fr;gap:32px;padding-block:32px 44px}
+  .campaign-roles h2{font-size:58px}.campaign-roles-intro{font-size:15px;margin-top:20px}
+  .campaign-role-list{gap:28px}.campaign-role-list>div{grid-template-columns:92px 1fr;gap:20px}.campaign-role-list dt{font-size:32px}.campaign-role-list dt span[lang=en]{font-size:20px}.campaign-role-list dd{font-size:14px;line-height:1.85}
+  .campaign-close{grid-template-columns:1fr;gap:24px;padding-block:26px 48px}.campaign-close h2{font-size:76px}.campaign-close-details>p{font-size:16px}
+  .campaign-close .direct-contact{gap:8px 20px}
 }
 
 </style>
@@ -678,11 +712,11 @@ document.addEventListener('visibilitychange', () => {
 
 const email = 'daniel@noizer.co.il';
 const contactRoutes = language === 'en' ? {
-  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about creator collaborations for Partnership Ads.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign:\n' },
+  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a Partnership Ads campaign with multiple creators.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign goal:\n' },
   brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
   creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
 } : {
-  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על שיתוף פעולה עם יוצרים ב־Partnership Ads.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף והקמפיין:\n' },
+  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין Partnership Ads עם כמה יוצרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף ומטרת הקמפיין:\n' },
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };

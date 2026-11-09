@@ -224,11 +224,11 @@ document.addEventListener('visibilitychange', () => {
 
 const email = 'daniel@noizer.co.il';
 const contactRoutes = language === 'en' ? {
-  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about creator collaborations for Partnership Ads.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign:\n' },
+  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a Partnership Ads campaign with multiple creators.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign goal:\n' },
   brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
   creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
 } : {
-  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על שיתוף פעולה עם יוצרים ב־Partnership Ads.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף והקמפיין:\n' },
+  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין Partnership Ads עם כמה יוצרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף ומטרת הקמפיין:\n' },
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };
