@@ -115,7 +115,7 @@ function moveSprayCharacter(now) {
 }
 
 async function startSpray() {
-  if (motionPreference.matches) return;
+  if (!sprayArt || motionPreference.matches) return;
   const run = ++introRun;
   skipAnimation.hidden = false;
   // Measure the actual loaded letterforms so no font swap shifts the paint path.
@@ -128,6 +128,7 @@ async function startSpray() {
 }
 
 function finishSpray() {
+  if (!sprayArt) return;
   introRun++;
   cancelAnimationFrame(characterFrame);
   sprayArt.classList.remove('spraying');
@@ -141,21 +142,23 @@ function finishSpray() {
 // Session storage means a refresh or return to the page does not replay the intro.
 // When storage is unavailable the site still works; only persistence is unavailable.
 let hasSeenIntro = false;
-try {
-  hasSeenIntro = sessionStorage.getItem('noizer:intro-seen') === '1';
-  sessionStorage.setItem('noizer:intro-seen', '1');
-} catch { /* Private/restricted storage must never block access to content. */ }
+if (sprayArt) {
+  try {
+    hasSeenIntro = sessionStorage.getItem('noizer:intro-seen') === '1';
+    sessionStorage.setItem('noizer:intro-seen', '1');
+  } catch { /* Private/restricted storage must never block access to content. */ }
+}
 
 if (!hasSeenIntro && !motionPreference.matches) {
   startSpray();
 }
 window.addEventListener('resize', () => {
-  if (sprayArt.classList.contains('spraying')) measureCharacterPath();
+  if (sprayArt?.classList.contains('spraying')) measureCharacterPath();
 });
 document.fonts.ready.then(() => {
-  if (sprayArt.classList.contains('spraying')) measureCharacterPath();
+  if (sprayArt?.classList.contains('spraying')) measureCharacterPath();
 });
-skipAnimation.addEventListener('click', () => {
+skipAnimation?.addEventListener('click', () => {
   finishSpray();
   document.querySelector('.hero-actions a').focus({ preventScroll: true });
 });
@@ -166,8 +169,8 @@ motionPreference.addEventListener('change', (event) => {
 // Banner visibility is independent of video playback.
 const bannerToggle = document.querySelector('#banner-toggle');
 const examples = document.querySelector('#examples');
-bannerToggle.hidden = false;
-bannerToggle.addEventListener('click', () => {
+if (bannerToggle) bannerToggle.hidden = false;
+bannerToggle?.addEventListener('click', () => {
   const visible = bannerToggle.getAttribute('aria-pressed') !== 'true';
   bannerToggle.setAttribute('aria-pressed', String(visible));
   examples.classList.toggle('no-banners', !visible);
@@ -221,9 +224,11 @@ document.addEventListener('visibilitychange', () => {
 
 const email = 'daniel@noizer.co.il';
 const contactRoutes = language === 'en' ? {
+  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about creator collaborations for Partnership Ads.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign:\n' },
   brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
   creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
 } : {
+  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על שיתוף פעולה עם יוצרים ב־Partnership Ads.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף והקמפיין:\n' },
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };
@@ -233,7 +238,7 @@ document.querySelectorAll('[data-contact]').forEach((link) => {
 });
 
 const copyButton = document.querySelector('#copy-email');
-if (navigator.clipboard?.writeText) {
+if (copyButton && navigator.clipboard?.writeText) {
   copyButton.hidden = false;
   copyButton.addEventListener('click', async () => {
     const status = document.querySelector('#copy-status');

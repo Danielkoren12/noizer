@@ -20,17 +20,20 @@ def inline_asset(match):
     return f'url("data:{mime};base64,{encoded}")'
 
 
-def build(language='he'):
-    source = 'en/index.html' if language == 'en' else 'index.html'
-    output = 'preview-en.html' if language == 'en' else 'preview.html'
+def build(language='he', page='home'):
+    if page == 'partnership':
+        source = 'en/partnership-ads/index.html' if language == 'en' else 'partnership-ads/index.html'
+        output = 'preview-partnership-en.html' if language == 'en' else 'preview-partnership.html'
+    else:
+        source = 'en/index.html' if language == 'en' else 'index.html'
+        output = 'preview-en.html' if language == 'en' else 'preview.html'
     html = (ROOT / source).read_text()
     # English uses root-relative URLs in production; previews embed the same assets.
     for attribute in ['href', 'src', 'poster']:
         html = html.replace(f'{attribute}="/assets/', f'{attribute}="assets/')
     html = html.replace('href="/styles.css"', 'href="styles.css"')
     html = html.replace('src="/app.js"', 'src="app.js"')
-    html = html.replace('class="language-switch" href="/en/"', 'class="language-switch" href="https://noizer.co.il/en/"')
-    html = html.replace('class="language-switch" href="/"', 'class="language-switch" href="https://noizer.co.il/"')
+    html = re.sub(r'href="(/[^"]*)"', lambda m: f'href="https://noizer.co.il{m.group(1)}"', html)
     css = (ROOT / 'styles.css').read_text()
     css = re.sub(r"url\('([^']+)'\)", inline_asset, css)
     javascript = (ROOT / 'app.js').read_text()
@@ -57,3 +60,5 @@ def build(language='he'):
 if __name__ == '__main__':
     build('he')
     build('en')
+    build('he', 'partnership')
+    build('en', 'partnership')

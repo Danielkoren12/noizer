@@ -14,4 +14,18 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://noizer.co.il/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://noizer.co.il/"/>
   </url>
+  <url>
+    <loc>https://noizer.co.il/partnership-ads/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="he" href="https://noizer.co.il/partnership-ads/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://noizer.co.il/en/partnership-ads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://noizer.co.il/partnership-ads/"/>
+  </url>
+  <url>
+    <loc>https://noizer.co.il/en/partnership-ads/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <xhtml:link rel="alternate" hreflang="he" href="https://noizer.co.il/partnership-ads/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://noizer.co.il/en/partnership-ads/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://noizer.co.il/partnership-ads/"/>
+  </url>
 </urlset>

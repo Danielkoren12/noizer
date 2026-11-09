@@ -65,7 +65,7 @@ class SiteTests(unittest.TestCase):
         with urllib.request.urlopen(URL + 'sitemap.xml') as response:
             sitemap = ET.fromstring(response.read())
         ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-        self.assertEqual([el.text for el in sitemap.findall('s:url/s:loc', ns)], [canonical, canonical + 'en/'])
+        self.assertEqual([el.text for el in sitemap.findall('s:url/s:loc', ns)], [canonical, canonical + 'en/', canonical + 'partnership-ads/', canonical + 'en/partnership-ads/'])
         with urllib.request.urlopen(URL + 'robots.txt') as response:
             robots = response.read().decode()
         self.assertIn('Allow: /', robots)

@@ -153,6 +153,66 @@ html[lang=en] .section-top h2{max-width:650px}
   html[lang=en] .hero h1 br:nth-of-type(2){display:block}
 }
 
+/* Partnership Ads: editorial typography and a written campaign example. */
+.service-nav{white-space:nowrap}
+.site-header nav [aria-current=page]{color:var(--blue);text-decoration:underline;text-underline-offset:6px}
+.partnership-hero{display:grid;grid-template-columns:1.35fr 1fr;align-items:center;gap:60px;padding-block:64px 90px}
+.partnership-eyebrow{font-size:11px;letter-spacing:.08em;font-weight:500;color:var(--subtle);margin-bottom:24px;text-align:start}
+.partnership-hero h1{font-size:clamp(76px,7.5vw,108px);line-height:1.02}
+.partnership-description{font-size:17px;line-height:1.85;max-width:570px;margin-top:32px;color:#353c48}
+.partnership-scope{font-size:15px;line-height:1.85;max-width:570px;margin-top:16px;color:var(--subtle)}
+.partnership-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:28px}
+.partnership-example-link{font-size:13px;font-weight:500;min-height:44px;display:inline-flex;align-items:center;text-decoration:underline}
+.partnership-mark{position:relative;font-family:var(--hand);font-size:clamp(30px,3.7vw,52px);line-height:1.22;transform:rotate(-7deg);justify-self:center;padding:32px 8px 50px;max-width:100%}
+.partnership-mark span{display:block}.partnership-mark span:first-child{color:var(--blue)}
+.partnership-mark b{display:block;font-family:var(--body);font-size:44px;font-weight:400;line-height:1.4;color:var(--blue)}
+.partnership-mark svg{position:absolute;bottom:20px;left:0;width:100%;height:26px;stroke:var(--blue);stroke-width:4;fill:none;stroke-linecap:round}
+.partnership-value{padding-block:32px 90px}
+.partnership-value h2{font-size:clamp(48px,4.9vw,68px);max-width:800px;line-height:1.05}
+.partnership-benefits{list-style:none;padding:0;margin:42px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:42px}
+.partnership-benefits li{border-top:2px solid var(--blue);padding-top:16px}
+.partnership-index{font-family:var(--hand);font-size:18px;color:var(--blue)}
+.partnership-benefits h3{font-family:var(--display);font-size:38px;line-height:1.1;margin-top:20px}
+.partnership-benefits p{font-size:15px;line-height:1.8;color:var(--subtle);margin-top:12px;max-width:340px}
+.partnership-example{background:var(--blue);color:white;padding-block:72px}
+.partnership-example-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:100px}
+.partnership-example-label{display:inline-block;font-size:12px;border-bottom:1px solid #ffffff90;padding-bottom:6px;margin-bottom:22px}
+.partnership-example h2{font-size:clamp(60px,6vw,84px);line-height:1.02}
+.partnership-story{font-size:16px;line-height:1.85;margin-top:24px;max-width:420px}
+.partnership-timeline{list-style:none;margin:0;padding:0;display:grid;gap:28px}
+.partnership-timeline li{display:grid;grid-template-columns:42px 1fr;gap:20px;padding-top:22px;border-top:1px solid #ffffff60}
+.partnership-timeline li>span{font-family:var(--hand);font-size:20px}
+.partnership-timeline h3{font-family:var(--display);font-size:38px;line-height:1.1}
+.partnership-timeline p{font-size:15px;line-height:1.8;margin-top:9px;max-width:480px}
+.partnership-permission{font-size:12px;line-height:1.8;color:#e2e8ff;margin-top:28px}
+.partnership-contact-intro{font-size:16px;line-height:1.8;margin-top:24px;max-width:550px;color:#dce0e8}
+.partnership-contact .button{margin-top:26px}
+.blue-to-ink{--edge-from:var(--blue);--edge-to:var(--ink)}
+html[lang=en] .partnership-benefits h3,html[lang=en] .partnership-timeline h3{text-transform:uppercase}
+html[lang=en] .partnership-actions svg,html[lang=en] .partnership-contact .button svg{transform:scaleX(-1)}
+@media(min-width:761px) and (max-width:1100px){
+  .site-header{display:grid;grid-template-columns:1fr auto;gap:12px 20px;padding-block:20px;min-height:0}
+  .header-actions{display:contents}.site-header .brand{grid-row:1;grid-column:1}
+  .language-switch{grid-row:1;grid-column:2}.site-header nav{grid-row:2;grid-column:1/-1;justify-content:space-between}
+}
+@media(max-width:760px){
+  .site-header nav{flex-wrap:wrap;row-gap:6px}.site-header nav .service-nav{font-size:11px}
+  .partnership-hero{grid-template-columns:1fr;gap:28px;padding-block:36px 52px}
+  .partnership-eyebrow{font-size:9px;letter-spacing:.035em;margin-bottom:20px}
+  .partnership-hero h1{font-size:clamp(66px,14vw,88px)}
+  .partnership-description{font-size:16px;margin-top:26px}.partnership-scope{font-size:14px}
+  .partnership-mark{display:flex;align-items:center;gap:14px;font-size:clamp(17px,4.7vw,30px);padding:20px 0 36px}
+  .partnership-mark b{font-size:27px}.partnership-mark svg{bottom:10px}
+  .partnership-value{padding-block:24px 52px}.partnership-value h2{font-size:48px}
+  .partnership-benefits{grid-template-columns:1fr;gap:28px;margin-top:30px}
+  .partnership-benefits h3{font-size:34px;margin-top:12px}.partnership-benefits p{font-size:14px;max-width:100%}
+  .partnership-example{padding-block:50px}.partnership-example-layout{grid-template-columns:1fr;gap:36px}
+  .partnership-example h2{font-size:62px}.partnership-story{font-size:15px;margin-top:22px}
+  .partnership-timeline li{gap:14px;grid-template-columns:34px 1fr}.partnership-timeline h3{font-size:34px}.partnership-timeline p{font-size:14px}
+  .partnership-contact-intro{font-size:15px}.partnership-contact h2{font-size:clamp(52px,12.5vw,68px)}
+  .partnership-actions .button,.partnership-contact .button{font-size:13px;gap:14px;padding-inline:16px}
+}
+
 </style>
   
   <script type="application/ld+json">
@@ -202,6 +262,7 @@ html[lang=en] .section-top h2{max-width:650px}
       <nav aria-label="ניווט ראשי">
         <a href="#examples">כך זה נראה</a>
         <a href="#how-it-works">איך זה עובד</a>
+        <a class="service-nav" href="https://noizer.co.il/partnership-ads/" lang="en">Partnership Ads</a>
         <a class="nav-contact" href="#contact">בואו נדבר <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></a>
       </nav>
       <a class="language-switch" href="https://noizer.co.il/en/" lang="en" hreflang="en" aria-label="Switch to English">EN</a>
@@ -504,7 +565,7 @@ function moveSprayCharacter(now) {
 }
 
 async function startSpray() {
-  if (motionPreference.matches) return;
+  if (!sprayArt || motionPreference.matches) return;
   const run = ++introRun;
   skipAnimation.hidden = false;
   // Measure the actual loaded letterforms so no font swap shifts the paint path.
@@ -517,6 +578,7 @@ async function startSpray() {
 }
 
 function finishSpray() {
+  if (!sprayArt) return;
   introRun++;
   cancelAnimationFrame(characterFrame);
   sprayArt.classList.remove('spraying');
@@ -530,21 +592,23 @@ function finishSpray() {
 // Session storage means a refresh or return to the page does not replay the intro.
 // When storage is unavailable the site still works; only persistence is unavailable.
 let hasSeenIntro = false;
-try {
-  hasSeenIntro = sessionStorage.getItem('noizer:intro-seen') === '1';
-  sessionStorage.setItem('noizer:intro-seen', '1');
-} catch { /* Private/restricted storage must never block access to content. */ }
+if (sprayArt) {
+  try {
+    hasSeenIntro = sessionStorage.getItem('noizer:intro-seen') === '1';
+    sessionStorage.setItem('noizer:intro-seen', '1');
+  } catch { /* Private/restricted storage must never block access to content. */ }
+}
 
 if (!hasSeenIntro && !motionPreference.matches) {
   startSpray();
 }
 window.addEventListener('resize', () => {
-  if (sprayArt.classList.contains('spraying')) measureCharacterPath();
+  if (sprayArt?.classList.contains('spraying')) measureCharacterPath();
 });
 document.fonts.ready.then(() => {
-  if (sprayArt.classList.contains('spraying')) measureCharacterPath();
+  if (sprayArt?.classList.contains('spraying')) measureCharacterPath();
 });
-skipAnimation.addEventListener('click', () => {
+skipAnimation?.addEventListener('click', () => {
   finishSpray();
   document.querySelector('.hero-actions a').focus({ preventScroll: true });
 });
@@ -555,8 +619,8 @@ motionPreference.addEventListener('change', (event) => {
 // Banner visibility is independent of video playback.
 const bannerToggle = document.querySelector('#banner-toggle');
 const examples = document.querySelector('#examples');
-bannerToggle.hidden = false;
-bannerToggle.addEventListener('click', () => {
+if (bannerToggle) bannerToggle.hidden = false;
+bannerToggle?.addEventListener('click', () => {
   const visible = bannerToggle.getAttribute('aria-pressed') !== 'true';
   bannerToggle.setAttribute('aria-pressed', String(visible));
   examples.classList.toggle('no-banners', !visible);
@@ -610,9 +674,11 @@ document.addEventListener('visibilitychange', () => {
 
 const email = 'daniel@noizer.co.il';
 const contactRoutes = language === 'en' ? {
+  partnership: { subject: 'NOIZER — Partnership Ads inquiry', body: 'Hi NOIZER,\nWe’d like to hear about creator collaborations for Partnership Ads.\n\nBrand / agency name:\nContact name:\nTell us about your brief and campaign:\n' },
   brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
   creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
 } : {
+  partnership: { subject: 'NOIZER — פנייה בנושא Partnership Ads', body: 'היי NOIZER,\nנרצה לשמוע על שיתוף פעולה עם יוצרים ב־Partnership Ads.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הבריף והקמפיין:\n' },
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };
@@ -622,7 +688,7 @@ document.querySelectorAll('[data-contact]').forEach((link) => {
 });
 
 const copyButton = document.querySelector('#copy-email');
-if (navigator.clipboard?.writeText) {
+if (copyButton && navigator.clipboard?.writeText) {
   copyButton.hidden = false;
   copyButton.addEventListener('click', async () => {
     const status = document.querySelector('#copy-status');

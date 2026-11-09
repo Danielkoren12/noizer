@@ -4,7 +4,7 @@ import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'public'
-PUBLIC_FILES = ['index.html', 'en/index.html', 'styles.css', 'app.js', 'robots.txt', 'sitemap.xml', '_redirects']
+PUBLIC_FILES = ['index.html', 'en/index.html', 'partnership-ads/index.html', 'en/partnership-ads/index.html', 'styles.css', 'app.js', 'robots.txt', 'sitemap.xml', '_redirects']
 ASSET_TYPES = {'.ttf', '.woff', '.woff2', '.svg', '.png', '.jpg', '.jpeg', '.webp', '.avif', '.mp4', '.webm', '.txt'}
 
 
