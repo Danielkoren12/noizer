@@ -8,8 +8,12 @@
   <meta name="description" content="NOIZER מחברת מותגים ומשרדי פרסום ליוצרי תוכן, ומשלבת באנרים ממותגים בסרטוני Reels בצורה חדשנית, עם מעטפת שלמה מקצה לקצה, משלב בחירת היוצרים ועד לסיום הקמפיין.">
   <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://noizer.co.il/">
+  <link rel="alternate" hreflang="he" href="https://noizer.co.il/">
+  <link rel="alternate" hreflang="en" href="https://noizer.co.il/en/">
+  <link rel="alternate" hreflang="x-default" href="https://noizer.co.il/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="he_IL">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="NOIZER">
   <meta property="og:url" content="https://noizer.co.il/">
   <meta property="og:title" content="NOIZER | המותג שלכם. בתוך התוכן שלהם.">
@@ -126,6 +130,29 @@
 @media(hover:hover) and (pointer:fine){.footer-socials a:hover{color:var(--blue);text-decoration-color:currentColor}}
 @media(max-width:760px){.site-footer{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.site-footer>span[lang],.footer-copyright{justify-self:end}.footer-socials{grid-column:1/-1;justify-content:center;gap:14px}.footer-copyright{grid-column:1/-1;justify-self:center}.footer-socials a{font-size:11px;gap:5px}.footer-socials svg{width:20px;height:20px}}
 
+/* Real language links work without JavaScript, with an equally visible mobile switch. */
+.header-actions{display:flex;align-items:center;gap:28px;min-width:0}
+.language-switch{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:6px 10px;border:1px solid #d5dae3;border-radius:100px;color:var(--ink);font-size:13px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:color 160ms ease-out,border-color 160ms ease-out}
+@media(hover:hover) and (pointer:fine){.language-switch:hover{color:var(--blue);border-color:var(--blue)}}
+html[lang=en] h1,html[lang=en] h2,html[lang=en] .steps h3,html[lang=en] .example-explainer h3,html[lang=en] .contact-paths h3,html[lang=en] .faq-heading h3{text-transform:uppercase}
+html[lang=en] .hero .last-line{margin-right:0}
+html[lang=en] .skip-animation{direction:ltr}
+html[lang=en] .title-underline{right:auto;left:0;max-width:110%}
+html[lang=en] .hero-actions svg,html[lang=en] .nav-contact svg,html[lang=en] .contact-paths .button svg{transform:scaleX(-1)}
+html[lang=en] .toggle-track>span{transform:translateX(16px)}
+html[lang=en] .banner-toggle[aria-pressed=false] .toggle-track>span{transform:none}
+html[lang=en] .section-top h2{max-width:650px}
+@media(max-width:1050px){.header-actions{gap:16px}.site-header nav{gap:20px}}
+@media(max-width:760px){
+  .site-header{display:grid;grid-template-columns:1fr auto;gap:12px 16px;padding-block:16px 12px;min-height:0}
+  .header-actions{display:contents}
+  .site-header .brand{grid-row:1;grid-column:1}
+  .language-switch{grid-row:1;grid-column:2}
+  .site-header nav{grid-row:2;grid-column:1/-1;justify-content:space-between;gap:12px}
+  html[lang=en] .hero h1{font-size:clamp(76px,15vw,106px)}
+  html[lang=en] .hero h1 br:nth-of-type(2){display:block}
+}
+
 </style>
   
   <script type="application/ld+json">
@@ -171,11 +198,14 @@
   <a class="skip-link" href="#main">דלגו לתוכן</a>
   <header class="site-header shell">
     <a class="brand" href="#" aria-label="NOIZER — לראש העמוד"><span class="wordmark" lang="en" dir="ltr">NOIZER</span></a>
-    <nav aria-label="ניווט ראשי">
-      <a href="#examples">כך זה נראה</a>
-      <a href="#how-it-works">איך זה עובד</a>
-      <a class="nav-contact" href="#contact">בואו נדבר <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></a>
-    </nav>
+    <div class="header-actions">
+      <nav aria-label="ניווט ראשי">
+        <a href="#examples">כך זה נראה</a>
+        <a href="#how-it-works">איך זה עובד</a>
+        <a class="nav-contact" href="#contact">בואו נדבר <svg class="inline-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19M5 5v14h14"/></svg></a>
+      </nav>
+      <a class="language-switch" href="https://noizer.co.il/en/" lang="en" hreflang="en" aria-label="Switch to English">EN</a>
+    </div>
   </header>
 
   <main id="main">
@@ -359,6 +389,38 @@
 <script>
 'use strict';
 
+// Each language is a real HTML page; only interactive messages are localized here.
+const language = document.documentElement.lang === 'en' ? 'en' : 'he';
+const interfaceCopy = {
+  "he": {
+    "hideBanner": "הסתירו את הבאנר",
+    "showBanner": "הציגו את הבאנר",
+    "bannerVisible": "הבאנר מוצג בסרטונים",
+    "bannerHidden": "התוכן מוצג ללא הבאנר",
+    "playVideo": "הפעילו סרטון",
+    "pauseVideo": "עצרו סרטון",
+    "unmuteVideo": "הפעילו קול בסרטון",
+    "muteVideo": "כבו קול בסרטון",
+    "videoError": "לא ניתן לנגן כרגע. נסו שוב.",
+    "emailCopied": "כתובת הדוא״ל הועתקה",
+    "emailCopyError": "לא ניתן להעתיק אוטומטית. אפשר לסמן ולהעתיק את הכתובת."
+  },
+  "en": {
+    "hideBanner": "Hide the banner",
+    "showBanner": "Show the banner",
+    "bannerVisible": "The banners are visible in the videos",
+    "bannerHidden": "The videos are shown without banners",
+    "playVideo": "Play video",
+    "pauseVideo": "Pause video",
+    "unmuteVideo": "Unmute video",
+    "muteVideo": "Mute video",
+    "videoError": "The video could not be played. Please try again.",
+    "emailCopied": "Email address copied",
+    "emailCopyError": "Unable to copy automatically. Select and copy the email address."
+  }
+};
+const copy = interfaceCopy[language];
+
 // No analytics, cookies, form submission or external requests.
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const sprayArt = document.querySelector('#spray-art');
@@ -498,8 +560,8 @@ bannerToggle.addEventListener('click', () => {
   const visible = bannerToggle.getAttribute('aria-pressed') !== 'true';
   bannerToggle.setAttribute('aria-pressed', String(visible));
   examples.classList.toggle('no-banners', !visible);
-  document.querySelector('#toggle-label').textContent = visible ? 'הסתירו את הבאנר' : 'הציגו את הבאנר';
-  document.querySelector('#toggle-status').textContent = visible ? 'הבאנר מוצג בסרטונים' : 'התוכן מוצג ללא הבאנר';
+  document.querySelector('#toggle-label').textContent = visible ? copy.hideBanner : copy.showBanner;
+  document.querySelector('#toggle-status').textContent = visible ? copy.bannerVisible : copy.bannerHidden;
   examples.querySelectorAll('.mock-banner').forEach((banner) => {
     banner.setAttribute('aria-hidden', String(!visible));
   });
@@ -517,7 +579,7 @@ creatorVideos.forEach((video, index) => {
   frame.querySelector('.video-controls').hidden = false;
   const syncPlay = () => {
     play.dataset.playing = String(!video.paused);
-    play.setAttribute('aria-label', `${video.paused ? 'הפעילו' : 'עצרו'} סרטון ${index + 1}`);
+    play.setAttribute('aria-label', `${video.paused ? copy.playVideo : copy.pauseVideo} ${index + 1}`);
   };
   play.addEventListener('click', async () => {
     status.textContent = '';
@@ -525,7 +587,7 @@ creatorVideos.forEach((video, index) => {
     try {
       await video.play();
     } catch {
-      status.textContent = 'לא ניתן לנגן כרגע. נסו שוב.';
+      status.textContent = copy.videoError;
     }
   });
   sound.addEventListener('click', () => {
@@ -533,7 +595,7 @@ creatorVideos.forEach((video, index) => {
   });
   video.addEventListener('volumechange', () => {
     sound.setAttribute('aria-pressed', String(!video.muted));
-    sound.setAttribute('aria-label', `${video.muted ? 'הפעילו' : 'כבו'} קול בסרטון ${index + 1}`);
+    sound.setAttribute('aria-label', `${video.muted ? copy.unmuteVideo : copy.muteVideo} ${index + 1}`);
   });
   video.addEventListener('play', () => {
     creatorVideos.forEach(other => { if (other !== video) other.pause(); });
@@ -547,7 +609,10 @@ document.addEventListener('visibilitychange', () => {
 });
 
 const email = 'daniel@noizer.co.il';
-const contactRoutes = {
+const contactRoutes = language === 'en' ? {
+  brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
+  creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
+} : {
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };
@@ -563,9 +628,9 @@ if (navigator.clipboard?.writeText) {
     const status = document.querySelector('#copy-status');
     try {
       await navigator.clipboard.writeText(email);
-      status.textContent = 'כתובת הדוא״ל הועתקה';
+      status.textContent = copy.emailCopied;
     } catch {
-      status.textContent = 'לא ניתן להעתיק אוטומטית. אפשר לסמן ולהעתיק את הכתובת.';
+      status.textContent = copy.emailCopyError;
     }
   });
 }

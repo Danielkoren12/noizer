@@ -20,8 +20,17 @@ def inline_asset(match):
     return f'url("data:{mime};base64,{encoded}")'
 
 
-def build():
-    html = (ROOT / 'index.html').read_text()
+def build(language='he'):
+    source = 'en/index.html' if language == 'en' else 'index.html'
+    output = 'preview-en.html' if language == 'en' else 'preview.html'
+    html = (ROOT / source).read_text()
+    # English uses root-relative URLs in production; previews embed the same assets.
+    for attribute in ['href', 'src', 'poster']:
+        html = html.replace(f'{attribute}="/assets/', f'{attribute}="assets/')
+    html = html.replace('href="/styles.css"', 'href="styles.css"')
+    html = html.replace('src="/app.js"', 'src="app.js"')
+    html = html.replace('class="language-switch" href="/en/"', 'class="language-switch" href="https://noizer.co.il/en/"')
+    html = html.replace('class="language-switch" href="/"', 'class="language-switch" href="https://noizer.co.il/"')
     css = (ROOT / 'styles.css').read_text()
     css = re.sub(r"url\('([^']+)'\)", inline_asset, css)
     javascript = (ROOT / 'app.js').read_text()
@@ -41,9 +50,10 @@ def build():
     licenses = {path.name: path.read_text() for path in (ROOT / 'assets/fonts').glob('*.txt')}
     license_data = json.dumps(licenses, ensure_ascii=False).replace('<', '\\u003c')
     html = html.replace('</body>', f'<script type="application/json" id="bundled-font-licenses">{license_data}</script>\n<script>\n{javascript}\n</script>\n</body>')
-    (ROOT / 'preview.html').write_text(html)
-    print('Built preview.html: all CSS, JavaScript, fonts, favicon and font licenses embedded.')
+    (ROOT / output).write_text(html)
+    print(f'Built {output}: CSS, JavaScript, fonts, examples and licenses embedded.')
 
 
 if __name__ == '__main__':
-    build()
+    build('he')
+    build('en')

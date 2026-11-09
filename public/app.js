@@ -1,5 +1,37 @@
 'use strict';
 
+// Each language is a real HTML page; only interactive messages are localized here.
+const language = document.documentElement.lang === 'en' ? 'en' : 'he';
+const interfaceCopy = {
+  "he": {
+    "hideBanner": "הסתירו את הבאנר",
+    "showBanner": "הציגו את הבאנר",
+    "bannerVisible": "הבאנר מוצג בסרטונים",
+    "bannerHidden": "התוכן מוצג ללא הבאנר",
+    "playVideo": "הפעילו סרטון",
+    "pauseVideo": "עצרו סרטון",
+    "unmuteVideo": "הפעילו קול בסרטון",
+    "muteVideo": "כבו קול בסרטון",
+    "videoError": "לא ניתן לנגן כרגע. נסו שוב.",
+    "emailCopied": "כתובת הדוא״ל הועתקה",
+    "emailCopyError": "לא ניתן להעתיק אוטומטית. אפשר לסמן ולהעתיק את הכתובת."
+  },
+  "en": {
+    "hideBanner": "Hide the banner",
+    "showBanner": "Show the banner",
+    "bannerVisible": "The banners are visible in the videos",
+    "bannerHidden": "The videos are shown without banners",
+    "playVideo": "Play video",
+    "pauseVideo": "Pause video",
+    "unmuteVideo": "Unmute video",
+    "muteVideo": "Mute video",
+    "videoError": "The video could not be played. Please try again.",
+    "emailCopied": "Email address copied",
+    "emailCopyError": "Unable to copy automatically. Select and copy the email address."
+  }
+};
+const copy = interfaceCopy[language];
+
 // No analytics, cookies, form submission or external requests.
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 const sprayArt = document.querySelector('#spray-art');
@@ -139,8 +171,8 @@ bannerToggle.addEventListener('click', () => {
   const visible = bannerToggle.getAttribute('aria-pressed') !== 'true';
   bannerToggle.setAttribute('aria-pressed', String(visible));
   examples.classList.toggle('no-banners', !visible);
-  document.querySelector('#toggle-label').textContent = visible ? 'הסתירו את הבאנר' : 'הציגו את הבאנר';
-  document.querySelector('#toggle-status').textContent = visible ? 'הבאנר מוצג בסרטונים' : 'התוכן מוצג ללא הבאנר';
+  document.querySelector('#toggle-label').textContent = visible ? copy.hideBanner : copy.showBanner;
+  document.querySelector('#toggle-status').textContent = visible ? copy.bannerVisible : copy.bannerHidden;
   examples.querySelectorAll('.mock-banner').forEach((banner) => {
     banner.setAttribute('aria-hidden', String(!visible));
   });
@@ -158,7 +190,7 @@ creatorVideos.forEach((video, index) => {
   frame.querySelector('.video-controls').hidden = false;
   const syncPlay = () => {
     play.dataset.playing = String(!video.paused);
-    play.setAttribute('aria-label', `${video.paused ? 'הפעילו' : 'עצרו'} סרטון ${index + 1}`);
+    play.setAttribute('aria-label', `${video.paused ? copy.playVideo : copy.pauseVideo} ${index + 1}`);
   };
   play.addEventListener('click', async () => {
     status.textContent = '';
@@ -166,7 +198,7 @@ creatorVideos.forEach((video, index) => {
     try {
       await video.play();
     } catch {
-      status.textContent = 'לא ניתן לנגן כרגע. נסו שוב.';
+      status.textContent = copy.videoError;
     }
   });
   sound.addEventListener('click', () => {
@@ -174,7 +206,7 @@ creatorVideos.forEach((video, index) => {
   });
   video.addEventListener('volumechange', () => {
     sound.setAttribute('aria-pressed', String(!video.muted));
-    sound.setAttribute('aria-label', `${video.muted ? 'הפעילו' : 'כבו'} קול בסרטון ${index + 1}`);
+    sound.setAttribute('aria-label', `${video.muted ? copy.unmuteVideo : copy.muteVideo} ${index + 1}`);
   });
   video.addEventListener('play', () => {
     creatorVideos.forEach(other => { if (other !== video) other.pause(); });
@@ -188,7 +220,10 @@ document.addEventListener('visibilitychange', () => {
 });
 
 const email = 'daniel@noizer.co.il';
-const contactRoutes = {
+const contactRoutes = language === 'en' ? {
+  brands: { subject: 'NOIZER — Brand or agency inquiry', body: 'Hi NOIZER,\nWe’d like to hear about a banner campaign.\n\nBrand / agency name:\nContact name:\nTell us about your campaign:\n' },
+  creators: { subject: 'NOIZER — Creator inquiry', body: 'Hi NOIZER,\nWe’d like to join the creator house.\n\nName:\nInstagram / YouTube profile link:\nTell us about your content:\n' }
+} : {
   brands: { subject: 'NOIZER — פנייה ממותג או משרד פרסום', body: 'היי NOIZER,\nנרצה לשמוע על קמפיין באנרים.\n\nשם המותג / המשרד:\nשם איש / אשת הקשר:\nקצת על הקמפיין:\n' },
   creators: { subject: 'NOIZER — הצטרפות יוצר/ת תוכן', body: 'היי NOIZER,\nנרצה להצטרף לבית היוצרים.\n\nשם:\nקישור לפרופיל Instagram / YouTube:\nקצת על התוכן שלנו:\n' }
 };
@@ -204,9 +239,9 @@ if (navigator.clipboard?.writeText) {
     const status = document.querySelector('#copy-status');
     try {
       await navigator.clipboard.writeText(email);
-      status.textContent = 'כתובת הדוא״ל הועתקה';
+      status.textContent = copy.emailCopied;
     } catch {
-      status.textContent = 'לא ניתן להעתיק אוטומטית. אפשר לסמן ולהעתיק את הכתובת.';
+      status.textContent = copy.emailCopyError;
     }
   });
 }

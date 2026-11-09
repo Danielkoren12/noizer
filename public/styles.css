@@ -97,3 +97,26 @@
 .footer-socials .social-dot{fill:currentColor;stroke:none}
 @media(hover:hover) and (pointer:fine){.footer-socials a:hover{color:var(--blue);text-decoration-color:currentColor}}
 @media(max-width:760px){.site-footer{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}.site-footer>span[lang],.footer-copyright{justify-self:end}.footer-socials{grid-column:1/-1;justify-content:center;gap:14px}.footer-copyright{grid-column:1/-1;justify-self:center}.footer-socials a{font-size:11px;gap:5px}.footer-socials svg{width:20px;height:20px}}
+
+/* Real language links work without JavaScript, with an equally visible mobile switch. */
+.header-actions{display:flex;align-items:center;gap:28px;min-width:0}
+.language-switch{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:6px 10px;border:1px solid #d5dae3;border-radius:100px;color:var(--ink);font-size:13px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:color 160ms ease-out,border-color 160ms ease-out}
+@media(hover:hover) and (pointer:fine){.language-switch:hover{color:var(--blue);border-color:var(--blue)}}
+html[lang=en] h1,html[lang=en] h2,html[lang=en] .steps h3,html[lang=en] .example-explainer h3,html[lang=en] .contact-paths h3,html[lang=en] .faq-heading h3{text-transform:uppercase}
+html[lang=en] .hero .last-line{margin-right:0}
+html[lang=en] .skip-animation{direction:ltr}
+html[lang=en] .title-underline{right:auto;left:0;max-width:110%}
+html[lang=en] .hero-actions svg,html[lang=en] .nav-contact svg,html[lang=en] .contact-paths .button svg{transform:scaleX(-1)}
+html[lang=en] .toggle-track>span{transform:translateX(16px)}
+html[lang=en] .banner-toggle[aria-pressed=false] .toggle-track>span{transform:none}
+html[lang=en] .section-top h2{max-width:650px}
+@media(max-width:1050px){.header-actions{gap:16px}.site-header nav{gap:20px}}
+@media(max-width:760px){
+  .site-header{display:grid;grid-template-columns:1fr auto;gap:12px 16px;padding-block:16px 12px;min-height:0}
+  .header-actions{display:contents}
+  .site-header .brand{grid-row:1;grid-column:1}
+  .language-switch{grid-row:1;grid-column:2}
+  .site-header nav{grid-row:2;grid-column:1/-1;justify-content:space-between;gap:12px}
+  html[lang=en] .hero h1{font-size:clamp(76px,15vw,106px)}
+  html[lang=en] .hero h1 br:nth-of-type(2){display:block}
+}
